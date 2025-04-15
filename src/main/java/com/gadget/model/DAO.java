@@ -10,15 +10,15 @@ public class DAO {
 
 	public DAO() throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		c=DriverManager.getConnection("jdbc:mysql://localhost:3306/raju","root","Incapp@12");
+		c=DriverManager.getConnection("jdbc:mysql://localhost:3306/gadgetfix","root","Incapp@12");
 	}
 	
 	public void closeConnection() throws SQLException  {
 		c.close();
 	}
-	public String adminLogin(String id,String password) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from admin_login where id=? and password=?");
-		p.setString(1, id);
+	public String adminLogin(String email,String password) throws SQLException{
+		PreparedStatement p=c.prepareStatement("select * from admin where email=? and password=?");
+		p.setString(1, email);
 		p.setString(2, password);
 		ResultSet rs=p.executeQuery();
 		if(rs.next()) {
@@ -108,18 +108,48 @@ public class DAO {
 		}
 	}
 
-	public void addGadget(String name, String brand_name, String problem, InputStream photo1, InputStream photo2,String user_email,String repair_expert_email,String address)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("insert into gadgets (name,brand_name,problem,photo1,photo2,repair_amount,status,user_email,repair_expert_email,address,requested,amount_rec,approved,received,repaired,delivered,confirmed) values (?,?,?,?,?,0,'Pending',?,?,?,now(),now(),now(),now(),now(),now(),now())");
-		p.setString(1, name);
-		p.setString(2, brand_name);
-		p.setString(3, problem);
-		p.setBinaryStream(4, photo1);
-		p.setBinaryStream(5, photo2);
-		p.setString(6, user_email);
-		p.setString(7, repair_expert_email);
-		p.setString(8, address);
-		p.executeUpdate();
+	public void addGadget(String name, String brand_name, String problem, InputStream photo1, InputStream photo2,
+			String user_email, String repair_expert_email, String address) throws SQLException {
+		c.setAutoCommit(false);
+
+		try {
+			String gadgetSQL = "INSERT INTO gadgets (name, brand_name, problem, photo1, photo2, repair_amount, user_email, repair_expert_email, address) "
+					+ "VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?)";
+
+			PreparedStatement gadgetStmt = c.prepareStatement(gadgetSQL, Statement.RETURN_GENERATED_KEYS);
+			gadgetStmt.setString(1, name);
+			gadgetStmt.setString(2, brand_name);
+			gadgetStmt.setString(3, problem);
+			gadgetStmt.setBinaryStream(4, photo1);
+			gadgetStmt.setBinaryStream(5, photo2);
+			gadgetStmt.setString(6, user_email);
+			gadgetStmt.setString(7, repair_expert_email);
+			gadgetStmt.setString(8, address);
+			gadgetStmt.executeUpdate();
+
+			ResultSet generatedKeys = gadgetStmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				int gadgetId = generatedKeys.getInt(1);
+
+				String statusSQL = "INSERT INTO status (id,status, requested, amount_rec, approved, received, repaired, delivered, confirmed) "
+						+ "VALUES (?,?, now(), now(), now(), now(), now(), now(), now())";
+
+				PreparedStatement statusStmt = c.prepareStatement(statusSQL);
+				statusStmt.setInt(1, gadgetId);
+				statusStmt.setString(2,"Pending");
+				statusStmt.executeUpdate();
+			} else {
+				throw new SQLException("Creating gadget failed, no ID obtained.");
+			}
+			c.commit();
+		} catch (SQLException e) {
+			c.rollback(); 
+			throw e;
+		} finally {
+			c.setAutoCommit(true);
+		}
 	}
+
 	public void changeEnquiryStatus(int id, String status)  throws SQLException{
 		PreparedStatement p=c.prepareStatement("update enquiries set status=? where id=?");
 		p.setString(1, status);
@@ -134,21 +164,21 @@ public class DAO {
 	public void changeGadgetStatus(int id, String status)  throws SQLException{
 		PreparedStatement p=null;
 		if(status.equalsIgnoreCase("accept")) {
-			p=c.prepareStatement("update gadgets set status=?,approved = now() where id=?");
+			p=c.prepareStatement("update status set status=?,approved = now() where id=?");
 		}else if(status.equalsIgnoreCase("WaitingApproval")) {
-			p=c.prepareStatement("update gadgets set status=?, amount_rec = now() where id=?");
+			p=c.prepareStatement("update status set status=?, amount_rec = now() where id=?");
 		}else if(status.equalsIgnoreCase("decline")) {
-			p=c.prepareStatement("update gadgets set status=?, approved = now() where id=?");
+			p=c.prepareStatement("update status set status=?, approved = now() where id=?");
 		}else if(status.equalsIgnoreCase("received")) {
-			p=c.prepareStatement("update gadgets set status=?, received = now() where id=?");
+			p=c.prepareStatement("update status set status=?, received = now() where id=?");
 		}else if(status.equalsIgnoreCase("repaired")) {
-			p=c.prepareStatement("update gadgets set status=?, repaired = now() where id=?");
+			p=c.prepareStatement("update status set status=?, repaired = now() where id=?");
 		}else if(status.equalsIgnoreCase("delivered")) {
-			p=c.prepareStatement("update gadgets set status=?, delivered = now() where id=?");
+			p=c.prepareStatement("update status set status=?, delivered = now() where id=?");
 		}else if(status.equalsIgnoreCase("confirmed")) {
-			p=c.prepareStatement("update gadgets set status=?, confirmed = now() where id=?");
+			p=c.prepareStatement("update status set status=?, confirmed = now() where id=?");
 		}else if(status.equalsIgnoreCase("repairing")) {
-			p=c.prepareStatement("update gadgets set status=? where id=?");
+			p=c.prepareStatement("update status set status=? where id=?");
 		}
 		
 		p.setString(1, status);
@@ -178,7 +208,7 @@ public class DAO {
 		}
 	}
 	public ArrayList<HashMap> getAllEnquiries() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from enquiries order by e_date DESC");
+		PreparedStatement p=c.prepareStatement("select * from enquiries order by enquery_date DESC");
 		ResultSet rs=p.executeQuery();
 		ArrayList<HashMap> enquiries=new ArrayList<>();
 		while(rs.next()) {
@@ -187,7 +217,7 @@ public class DAO {
 			enquiry.put("name", rs.getString("name"));
 			enquiry.put("phone", rs.getString("phone"));
 			enquiry.put("status", rs.getString("status"));
-			enquiry.put("e_date", rs.getDate("e_date"));
+			enquiry.put("e_date", rs.getDate("enquery_date"));
 			enquiries.add(enquiry);
 		}
 		return enquiries;
@@ -237,9 +267,10 @@ public class DAO {
 	public ArrayList<HashMap> getAllRepairRequestsByEmail(String type,String email) throws SQLException{
 		PreparedStatement p;
 		if(type.equalsIgnoreCase("user")) {
-			p=c.prepareStatement("select * from gadgets where user_email=? order by id DESC");
+			p=c.prepareStatement("SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.user_email = ? ORDER BY g.id DESC");;
 		}else {
 			p=c.prepareStatement("select * from gadgets where repair_expert_email=? order by id DESC");
+			p=c.prepareStatement("SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.repair_expert_email = ? ORDER BY g.id DESC");
 		}
 		p.setString(1, email);
 		ResultSet rs=p.executeQuery();
@@ -250,17 +281,20 @@ public class DAO {
 			gadget.put("name", rs.getString("name"));
 			gadget.put("brand_name", rs.getString("brand_name"));
 			gadget.put("problem", rs.getString("problem"));
-			gadget.put("status", rs.getString("status"));
 			gadget.put("repair_amount", rs.getString("repair_amount"));
 			gadget.put("user_email", rs.getString("user_email"));
 			gadget.put("address", rs.getString("address"));
 			gadget.put("repair_expert_email", rs.getString("repair_expert_email"));	
+			gadget.put("status", rs.getString("status"));
 			gadgets.add(gadget);
 		}
 		return gadgets;
 	}
 	public ArrayList<HashMap> getAllRepairRequestsById(int id) throws SQLException{
-		PreparedStatement 		p=c.prepareStatement("select * from gadgets where id=? order by id DESC");
+		PreparedStatement 		p=c.prepareStatement("SELECT * FROM gadgets " +
+			    "JOIN status ON gadgets.id = status.id " +
+			    "WHERE gadgets.id = ? " +
+			    "ORDER BY gadgets.id DESC");
 		p.setInt(1, id);
 		ResultSet rs=p.executeQuery();
 		ArrayList<HashMap> gstatus=new ArrayList<>();

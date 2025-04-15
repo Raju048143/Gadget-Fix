@@ -116,7 +116,7 @@
 				Status: <b><%= gadget.get("status") %></b> <br>
 				Repair Amount: <b><%= gadget.get("repair_amount") %></b><br>
 				User Email: <b><%= gadget.get("user_email") %></b> 
-				User Email: <b><%= gadget.get("address") %></b> 
+				User Address: <b><%= gadget.get("address") %></b> 
 			</p>
 				<%
 				String status = (String) gadget.get("status");

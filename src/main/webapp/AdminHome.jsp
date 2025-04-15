@@ -98,12 +98,10 @@
       </div>
   </nav>
   
-  <div >
   <%
   	DAO db=new DAO();
   	ArrayList<HashMap> enquiries=db.getAllEnquiries();
 	db.closeConnection();
-	
   %>
 
   <h4 class="bg-primary text-white text-center p-2 mt-3" data-aos="fade-right" data-aos-duration="1000">All Enquiries:</h4>
