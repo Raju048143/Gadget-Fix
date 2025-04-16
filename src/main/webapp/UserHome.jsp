@@ -36,10 +36,7 @@
 			session.setAttribute("msg", null);
 		}
 	%>
-  <section class="bg-dark" id="contact">
-      <a id="contact-mail" href="mailto:info@gadgetfix.com"><i class="fa-solid fa-envelope"></i> info@gadgetfix.com</a>
-      <a id="contact-phone" href="tel:9811981198"><i class="fa-solid fa-mobile-screen-button"></i> <strong>9811981198</strong></a>
-  </section>
+	<%@ include file="resources/jspFile/info.jsp" %>
   <nav class="navbar navbar-expand-sm bg-light">
       <a href="index.jsp" id="logo" class="navbar-brand">
         <img src="resources/logo.png" alt="">Gadget<span>Fix</span>
@@ -47,8 +44,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#my-navbar"><i class="fa-solid fa-bars"></i></button>
       <div class="collapse navbar-collapse" id="my-navbar">
           <ul class="navbar-nav ml-auto">
-          <!-- <ul class="navbar-nav mr-auto"> -->
-          <!-- <ul class="navbar-nav mx-auto"> -->
               <li>
                  <a href="UserHome.jsp">Home</a>
               </li>

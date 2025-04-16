@@ -12,8 +12,8 @@ import jakarta.mail.internet.MimeMessage;
 
 public class SendMail {
     public static void sendMail(String rEmail, String sub, String body) {
-        String sEmail = "ry422920@gmail.com";
-        String sPassword = "hsikbcsqwhopwjod";
+        String sEmail = "gadgetfixinf0@gmail.com";
+        String sPassword = "hdlngasanzfgxrkk";
 
         try {
             Properties props = new Properties();
