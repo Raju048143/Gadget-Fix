@@ -71,38 +71,46 @@
   <div >
   <%
   	DAO db=new DAO();
-  	ArrayList<HashMap> enquiries=db.getAllGadgetRequest();
+  	ArrayList<HashMap> gadgets=db.getAllGadgetRequest();
 	db.closeConnection();
-	
-  %>
-
-  <h4 class="bg-primary text-white text-center p-2 mt-3" data-aos="fade-right" data-aos-duration="1000">All Gadgets:</h4>
-	<div class="container-fluid mt-3" data-aos="fade-right"
-		data-aos-duration="1000">
-		<table class="container table table-bordered ">
-			<thead class="text-center  bg-light">
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">Name</th>
-					<th scope="col">Status</th>
-				   <th scope="col">Details</th>
-				</tr>
-	    	</thead>
-			<tbody class=" bg-light">
+	if(gadgets.size() !=0)
+	{
+		 %>
+		  <h4 class="bg-primary text-white text-center p-2">All Gadgets:</h4>
+			<div class="container-fluid mt-3">
+				<table class="container table table-bordered ">
+					<thead class="text-center  bg-light">
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Status</th>
+						   <th scope="col">Details</th>
+						</tr>
+			    	</thead>
+					<tbody class=" bg-light">
+						<%
+						for (HashMap gadget : gadgets) {
+						%>
+						<tr>
+							<td><%=gadget.get("id")%></td>
+							<td><%=gadget.get("name")%></td>	
+							<td><%=gadget.get("status")%></td>
+		                   <td> <a class="btn btn-success btn-sm" href="GadgetDetails.jsp?id=<%=gadget.get("id")%>&status=<%=gadget.get("status")%>"> Details </a> </td>                 
+						</tr>
+						<%
+						}
+						%>
+					</tbody>
+				</table>
 				<%
-				for (HashMap enquiry : enquiries) {
-				%>
-				<tr>
-					<td><%=enquiry.get("id")%></td>
-					<td><%=enquiry.get("name")%></td>	
-					<td><%=enquiry.get("status")%></td>
-                   <td> <a class="btn btn-success btn-sm" href="GadgetDetails.jsp?id=<%=enquiry.get("id")%>&status=<%=enquiry.get("status")%>"> Details </a> </td>                 
-				</tr>
-				<%
-				}
-				%>
-			</tbody>
-		</table>
+	}else{
+		%>
+	       <div class="text-center mt-4">
+	         <p>Repair Expert Does not registered yet!</p>
+	      </div>
+	       <% 
+	}
+ %>
   </div>
   
   

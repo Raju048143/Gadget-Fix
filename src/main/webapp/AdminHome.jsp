@@ -75,52 +75,68 @@
   	DAO db=new DAO();
   	ArrayList<HashMap> enquiries=db.getAllEnquiries();
 	db.closeConnection();
+	if(enquiries.size() != 0)
+	{
+		%>
+				<h4 class="bg-primary text-white text-center p-2 mt-3" data-aos="fade-right" data-aos-duration="1000">All Enquiries:</h4>
+			<div class="container-fluid mt-3" data-aos="fade-right"
+				data-aos-duration="1000">
+				<table class="container table table-bordered ">
+					<thead class="text-center  bg-light">
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Phone</th>
+							<th scope="col">Status</th>
+							<th scope="col">Date</th>
+							
+							<th scope="col">Change Status</th>
+						</tr>
+			    	</thead>
+					<tbody class=" bg-light">
+						<%
+						for (HashMap enquiry : enquiries) {
+						%>
+						<tr>
+							<td><%=enquiry.get("id")%></td>
+							<td><%=enquiry.get("name")%></td>
+							<td><%=enquiry.get("phone")%></td>
+							<td><%=enquiry.get("status")%></td>
+		                    <td><%=enquiry.get("e_date")%></td> 
+		                    <td><%
+		  	      		if( ((String)enquiry.get("status")).equalsIgnoreCase("Pending")){
+		  	         	%>
+		  		     	<a class="btn btn-success btn-sm" href="ChangeEnquiryStatus?id=<%= enquiry.get("id") %>&status=Done">Done</a>
+		  		        <%		
+		  			    }else{
+		  	         	%>
+		  	  		<a class="btn btn-danger btn-sm" href="ChangeEnquiryStatus?id=<%= enquiry.get("id") %>&status=Pending">Pending</a>
+		  	     	<%		
+		  		     	}
+		  		     %>
+		  		     </td> 
+						</tr>
+						<%
+						}
+						%>
+					</tbody>
+				</table>
+		  </div>
+		<%
+	}else{
+		%>
+		 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center mt-4">
+      <p>No enquiries yet!</p>
+    </div>
+
+  </div>
+
+		<% 
+	}
   %>
 
-  <h4 class="bg-primary text-white text-center p-2 mt-3" data-aos="fade-right" data-aos-duration="1000">All Enquiries:</h4>
-	<div class="container-fluid mt-3" data-aos="fade-right"
-		data-aos-duration="1000">
-		<table class="container table table-bordered ">
-			<thead class="text-center  bg-light">
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">Name</th>
-					<th scope="col">Phone</th>
-					<th scope="col">Status</th>
-					<th scope="col">Date</th>
-					
-					<th scope="col">Change Status</th>
-				</tr>
-	    	</thead>
-			<tbody class=" bg-light">
-				<%
-				for (HashMap enquiry : enquiries) {
-				%>
-				<tr>
-					<td><%=enquiry.get("id")%></td>
-					<td><%=enquiry.get("name")%></td>
-					<td><%=enquiry.get("phone")%></td>
-					<td><%=enquiry.get("status")%></td>
-                    <td><%=enquiry.get("e_date")%></td> 
-                    <td><%
-  	      		if( ((String)enquiry.get("status")).equalsIgnoreCase("Pending")){
-  	         	%>
-  		     	<a class="btn btn-success btn-sm" href="ChangeEnquiryStatus?id=<%= enquiry.get("id") %>&status=Done">Done</a>
-  		        <%		
-  			    }else{
-  	         	%>
-  	  		<a class="btn btn-danger btn-sm" href="ChangeEnquiryStatus?id=<%= enquiry.get("id") %>&status=Pending">Pending</a>
-  	     	<%		
-  		     	}
-  		     %>
-  		     </td> 
-				</tr>
-				<%
-				}
-				%>
-			</tbody>
-		</table>
-  </div>
+  
   
   
   <footer class="bg-dark p-2 text-white text-center">

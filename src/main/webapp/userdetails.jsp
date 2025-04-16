@@ -74,27 +74,50 @@
   <div >
   <%
   	DAO db=new DAO();
-  	ArrayList<HashMap> enquiries=db.getusers();
+  	ArrayList<HashMap> users=db.getusers();
 	db.closeConnection();
-	
-  %>
-
-  <h4 class="bg-primary text-white text-center p-2 mt-3" data-aos="fade-right" data-aos-duration="1000">All Users:</h4>
-	<%
-				for (HashMap enquiry : enquiries) {
-				%>
-	  		<p class="bg-warning p-2 my-2"> 
-	  		Name: <b><%= enquiry.get("name")%> </b> 
-	  		Email <b><%= enquiry.get("email")%> </b> 
-	  		Phone: <b><%=enquiry.get("phone")%> </b> 
-	  		
-	  		</p>
-  <%	
-				}
+	if(users.size()!= 0)
+	{
+		%>
+		<h4 class="bg-primary text-white text-center p-2 mt-3">All Users:</h4>
+		<div class="container-fluid mt-3">
+				<table class="container table table-bordered ">
+					<thead class="text-center  bg-light">
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Email</th>
+							<th scope="col">Phone</th>
+						</tr>
+			    	</thead>
+					<tbody class=" bg-light">
+						<%
+						for (HashMap user : users) {
+						%>
+						<tr>
+							<td><%= user.get("name")%></td>
+							<td><%= user.get("email")%></td>
+							<td><%= user.get("phone")%></td>
+						</tr	>
+						<%
+						}
+						%>
+					</tbody>
+				</table>
+		  </div>
+		  <%
+	}else{
+		%>
+			 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+		    <div class="text-center mt-4">
+		      <p>User not registered yet!</p>
+		    </div>
 		
-	
+		  </div>
+
+		<%
+	}
   %>
-   
+</div>  
   <footer class="bg-dark p-2 text-white text-center">
       <p>&copy; Rights Reserved.</p>
   </footer>

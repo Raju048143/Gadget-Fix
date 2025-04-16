@@ -238,7 +238,7 @@ public class DAO {
 		return enquiries;
 	}
 	public ArrayList<HashMap> getAllGadgetRequest() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from gadgets ");
+		PreparedStatement p=c.prepareStatement("select g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id");
 		ResultSet rs=p.executeQuery();
 		ArrayList<HashMap> enquiries=new ArrayList<>();
 		while(rs.next()) {
