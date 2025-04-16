@@ -3,39 +3,10 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.gadget.model.DAO"%>
 <html>
-
 <head>
   <title>GadgetFix</title>
-  <link rel="icon" href="resources/logo.png" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
-
-  <!-- font-awesome  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
-
-  <!-- Lightbox CSS & Script -->
-  <script src="resources/lightbox/ekko-lightbox.js"></script>
-  <link rel="stylesheet" href="resources/lightbox/ekko-lightbox.css"/>
-  <!-- Lightbox END -->
-
-  <!-- AOS css and JS -->
-  <link rel="stylesheet" href="resources/aos/aos.css">
-  <script src="resources/aos/aos.js"></script>
-  <!-- AOS css and JS END-->
-
-  <!-- custom css -->
-  <link rel="stylesheet" href="resources/custom.css">
-
-  <meta name="author" content="Rahul Chauhan" />
-  <meta name="description" content="This is a website for Gadget Repaire Service." />
-  <meta name="keywords" content="" />
+   <%@ include file="resources/jspFile/header.jsp" %>
 </head>
-
 <body>
 
 	<%
@@ -62,35 +33,41 @@
       <a id="contact-phone" href="tel:9811981198"><i class="fa-solid fa-mobile-screen-button"></i> <strong>9811981198</strong></a>
   </section>
   <nav class="navbar navbar-expand-sm bg-light">
-      <a href="index.jsp" id="logo" class="navbar-brand">
-        <img src="resources/logo.png" alt="">Gadget<span>Fix</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#my-navbar"><i class="fa-solid fa-bars"></i></button>
-      <div class="collapse navbar-collapse" id="my-navbar">
-          <ul class="navbar-nav ml-auto">
-          <!-- <ul class="navbar-nav mr-auto"> -->
-          <!-- <ul class="navbar-nav mx-auto"> -->
-              <li>
-                 <a href="index.jsp">Home</a>
-              </li>
-              <li>
-                 <a href="" data-toggle="modal" data-target="#user-login">Sign In</a>
-              </li>
-              <li>
-                 <a href="" data-toggle="modal" data-target="#user-register-Modal">Sign Up</a>
-              </li>
-              <li>
-                 <a href="" data-toggle="modal" data-target="#admin-Modal">Admin</a>
-              </li>
-              <li>
-                 <a href="" data-toggle="modal" data-target="#repair-expert-Modal">RepairExpert</a>
-              </li>
-              <li>
-                <a href="" data-toggle="modal" data-target="#my-Modal">Contact</a>
-             </li>
-          </ul>
-      </div>
-  </nav>
+  <a href="index.jsp" id="logo" class="navbar-brand">
+    <img src="resources/logo.png" alt="">Gadget<span>Fix</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#my-navbar">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <div class="collapse navbar-collapse" id="my-navbar">
+    <ul class="navbar-nav ml-auto">
+
+      <li class="nav-item">
+        <a class="nav-link" href="index.jsp">Home</a>
+      </li>
+
+      <!-- Dropdown Menu for Login/Register -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Login / Register
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#user-login">User Login</a>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#user-register-Modal">User Register</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#admin-Modal">Admin Login</a>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#repair-expert-Modal">Repair Expert Login</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#my-Modal">Contact</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+  
 	<section class="container-fluid  text-center p-4 bg-dark text-white ">
 		<form method="post" action="index.jsp" class="  align-items-center">
 			<div class="form-row">
@@ -264,7 +241,7 @@ I recently had the opportunity to use the GadgetFix web application for repairin
   <div class="modal fade" id="my-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-info text-white">
           <h5 class="modal-title" id="exampleModalLabel">Get In Touch!</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -284,7 +261,7 @@ I recently had the opportunity to use the GadgetFix web application for repairin
   <div class="modal fade" id="user-login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-info text-white">
           <h5 class="modal-title" id="exampleModalLabel">User login!</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -292,20 +269,25 @@ I recently had the opportunity to use the GadgetFix web application for repairin
         </div>
         <div class="modal-body">
             <form method="post" action="UserSignIn">
-                <input name="email" class="form-control p-4 my-2" type="text" maxlength="45"  placeholder="Email" required />
-                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder=" Password" required />
+                <input name="email" class="form-control p-4 my-2" type="email" maxlength="45"  placeholder="Email" 
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., user@example.com)" required />
+                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder=" Password" 
+	                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+	                 title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character."required />
+                <div class="d-flex justify-content-end">
                 <button class="btn btn-primary my-2">Sign In</button>
+                </div>
             </form>
         </div>
       </div>
     </div>
   </div>
-  
+ 
   <!-- Adminlogin! -->
   <div class="modal fade" id="admin-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-info text-white">
           <h5 class="modal-title" id="exampleModalLabel">Admin Login!</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -313,9 +295,14 @@ I recently had the opportunity to use the GadgetFix web application for repairin
         </div>
         <div class="modal-body">
             <form method="post" action="AdminLogin">
-                <input name="id" class="form-control p-4 my-2" type="text" maxlength="20"  placeholder="Admin ID" required />
-                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder="Admin Password" required />
+                <input name="id" class="form-control p-4 my-2" type="text" maxlength="20"  placeholder="Admin ID" 
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., user@example.com)" required />
+                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder="Admin Password"
+                 pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+                  title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character." required />
+                <div class="d-flex justify-content-end">
                 <button class="btn btn-primary my-2">Login</button>
+                </div>
             </form>
         </div>
       </div>
@@ -334,9 +321,14 @@ I recently had the opportunity to use the GadgetFix web application for repairin
         </div>
         <div class="modal-body">
             <form method="post" action="RepairExpertLogin">
-                <input name="email" class="form-control p-4 my-2" type="email" maxlength="100"  placeholder="Email ID" required />
-                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder="Password" required />
+                <input name="email" class="form-control p-4 my-2" type="email" maxlength="100"  placeholder="Email ID"
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., user@example.com)" required />
+                <input name="password" class="form-control p-4 my-2" type="password" maxlength="20" placeholder="Password"
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+                  title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character." required />
+                <div class="d-flex justify-content-end">
                 <button class="btn btn-info my-2">Login</button>
+                </div>
             </form>
         </div>
       </div>
@@ -354,11 +346,15 @@ I recently had the opportunity to use the GadgetFix web application for repairin
         </div>
         <div class="modal-body">
             <form method="post" action="UserSignUp">
-               <input name="email" class="form-control p-2 my-2" type="email" maxlength="100" placeholder="Email" required />
+               <input name="email" class="form-control p-2 my-2" type="email" maxlength="100" placeholder="Email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., user@example.com)" required />
                 		<input name="name" class="form-control p-2 my-2" type="text" maxlength="20" pattern="[a-zA-Z ]+" placeholder="Name" required />
                 		<input name="phone" class="form-control p-2 my-2" type="tel" maxlength="10" minlength="10" pattern="[0-9]+" placeholder="Phone" required />
-                		<input name="password" class="form-control p-2 my-2" type="password" maxlength="20" placeholder="Password" required />
-                <button class="btn btn-info my-2">Sign Up</button>
+                		<input name="password" class="form-control p-2 my-2" type="password" maxlength="20" placeholder="Password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+                            title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character." required />
+                		<div class="d-flex justify-content-end">
+                        <button class="btn btn-info my-2">Sign Up</button>
+                        </div>
             </form>
         </div>
       </div>

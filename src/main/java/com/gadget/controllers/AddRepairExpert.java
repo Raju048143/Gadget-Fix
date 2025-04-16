@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 import com.gadget.model.DAO;
-import com.gadget.model.SendMail;
 
 /**
  * Servlet implementation class AdminLogin
