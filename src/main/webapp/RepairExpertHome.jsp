@@ -53,8 +53,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="RepairExpertHome.jsp">Home</a></li>
 				<li><a href="RepairExpertChangePassword.jsp">ChangePassword</a>
 				</li>
@@ -66,157 +64,56 @@
 	</nav>
 
 	<section class="container-fluied">
-		<h5 class="bg-primary text-white p-3 text-center ">All Repair
-			Requests</h5>
-
 		<%
   	ArrayList<HashMap> gadgets=db.getAllRepairRequestsByEmail("repair_expert",repair_expert_email);
 	
-	for(HashMap gadget:gadgets){
-  %>
-		<div class="row bg-info rounded p-2 m-2">
-			<div class=" col-sm">
-				<p>
-					ID: <b><%= gadget.get("id") %></b><br> Name: <b><%= gadget.get("name") %></b><br>
-					Brand Name: <b><%= gadget.get("brand_name") %></b><br> Status:
-					<b><%= gadget.get("status") %></b> <br> Repair Amount: <b><%= gadget.get("repair_amount") %></b><br>
-					User Email: <b><%= gadget.get("user_email") %></b> User Address: <b><%= gadget.get("address") %></b>
-				</p>
-				<%
-				String status = (String) gadget.get("status");
-				if (status.equalsIgnoreCase("pending")) {
-				%>
-				<a class="btn btn-success btn-sm"
-					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Confirmed&type=repair_expert&email=<%=gadget.get("user_email")%>">Confirmed</a>
-				<%
-				} else if (status.equalsIgnoreCase("confirmed")) {
-				%>
-				<a class="btn btn-success btn-sm"
-					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Received&type=repair_expert&email=<%=gadget.get("user_email")%>">Received</a>
-				<%
-				} else if (status.equalsIgnoreCase("accept")) {
-					%>
-				<a class="btn btn-success btn-sm"
-					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Repairing&type=repair_expert&email=<%=gadget.get("user_email")%>">Repairing</a>
-				<%
-				} else if (status.equalsIgnoreCase("repairing")) {
-				%>
-				<a class="btn btn-success btn-sm"
-					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Repaired&type=repair_expert&email=<%=gadget.get("user_email")%>">Repaired</a>
-				<%
-			} else if (status.equalsIgnoreCase("repaired")) {
+		if (gadgets.size() != 0) {
 			%>
-				<a class="btn btn-success btn-sm"
-					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Delivered&type=repair_expert&email=<%=gadget.get("user_email")%>">Delivered</a>
-				<%
-			} else if (status.equalsIgnoreCase("received")) {
-				%>
-				<form method="post" action="AddRepairAmount">
-					<input name="amount" class="form-control p-2 my-2" type="number"
-						min="100" placeholder="Repair Amount" required /> <input
-						type="hidden" name="id" value="<%= gadget.get("id") %>" /> <input
-						type="hidden" name="status" value="WaitingApproval" /> <input
-						type="hidden" name="email" value="<%=gadget.get("user_email")%>">
-					<button class="btn btn-success my-2">Submit</button>
-				</form>
-				<%
-				}
-			%>
+			<h4 class="bg-primary text-white text-center p-2">All Repair Requests:</h4>
+			<div class="container-fluid mt-3">
+				<table class="container table table-bordered ">
+					<thead class="text-center  bg-light">
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Brand Name</th>
+							<th scope="col">Status</th>
+							<th scope="col">Details</th>
+						</tr>
+					</thead>
+					<tbody class=" bg-light">
+						<%
+						for (HashMap gadget : gadgets) {
+						%>
+						<tr>
+							<td><%=gadget.get("id")%></td>
+							<td><%=gadget.get("name")%></td>
+							<td><%=gadget.get("brand_name")%></td>
+							<td><%=gadget.get("status")%></td>
+							<td><a class="btn btn-success btn-sm"
+									href="GadgetDetailsForRepairExpert.jsp?id=<%= gadget.get("id") %>">
+										Details </a></td>
+						</tr>
+						<%
+						}
+						%>
+					</tbody>
+				</table>
 			</div>
-			<div class="col-sm">
-				<section class="container">
-					<div class="row m-2">
-						<div class="col-sm m-2">
-							<img class="w-100" alt=""
-								src="GetGadgetPhoto?photo_no=1&id=<%=gadget.get("id")%>"
-								height="100px">
-						</div>
-						<div class="col-sm m-2">
-							<img class="w-100 " alt=""
-								src="GetGadgetPhoto?photo_no=2&id=<%=gadget.get("id")%>"
-								height="100px">
-						</div>
-					</div>
-				</section>
-				<div class="bg-light">
-					Problem: <b><%= gadget.get("problem") %></b>
+			<%
+			} else {
+			%>
+			<div class="d-flex justify-content-center align-items-center"
+				style="min-height: 80vh;">
+				<div class="text-center mt-4">
+					<p>No Gadget Request Found yet!</p>
 				</div>
+
 			</div>
-		</div>
-		<div class="ml-2">
-			<%
-			int id = (Integer) gadget.get("id");
-			ArrayList<HashMap> gstatus = db.getAllRepairRequestsById(id);
-
-			for (HashMap gsg : gstatus) {
-				if (status.equalsIgnoreCase("pending")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gadget.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("WaitingApproval")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-			Confirmed:<b><%=gsg.get("confirmed")%></b> &nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Current Status:<b><%=gsg.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("accept")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-			&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("confirmed")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gsg.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("decline")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-			&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("confirmed")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Decline:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gsg.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("received")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;confirmed:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-			&nbsp;&nbsp;Current Status:<b><%=gsg.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("repaired")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-			&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("confirmed")%></b>&nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-			&nbsp;&nbsp;Repaired:<b><%=gsg.get("repaired")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gsg.get("status")%></b>
-			<%
-			} else if (status.equalsIgnoreCase("delivered")) {
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-			Confirmed:<b><%=gsg.get("confirmed")%></b> &nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-			&nbsp;&nbsp;Repaired:<b><%=gsg.get("repaired")%></b>&nbsp;&nbsp;Delivered:<b><%=gsg.get("delivered")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gsg.get("status")%></b>
 
 			<%
-			} else if (status.equalsIgnoreCase("confirmed")){
-			%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-			Confirmed:<b><%=gsg.get("confirmed")%></b>&nbsp;&nbsp;Current Status:<b><%=gsg.get("status")%></b>
-			<%
-				} else if (status.equalsIgnoreCase("repairing")) {
-				%>
-			Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-			&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("confirmed")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-			Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Repairing:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-			Status:<b><%=gsg.get("status")%> </b>
-			<% 
 			}
-					 
-		}
-	  %>
-		</div>
-		<%
-		}
-		%>
-
+			%>
 
 	</section>
 	<footer class="bg-dark p-2 text-white text-center">
