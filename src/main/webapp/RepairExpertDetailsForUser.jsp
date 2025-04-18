@@ -47,8 +47,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="UserHome.jsp">Home</a></li>
 				<li>Welcome: <b><%= user_name %></b>
 				</li>
