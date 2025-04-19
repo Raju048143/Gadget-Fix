@@ -17,18 +17,20 @@ public class GetGadgetPhoto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		try {
-			int photo_no=Integer.parseInt(request.getParameter("photo_no"));
-			int id=Integer.parseInt(request.getParameter("id"));
-			DAO db=new DAO();
-			byte[] photo=db.getGadgetPhoto(photo_no, id);
+			int photo_no = Integer.parseInt(request.getParameter("photo_no"));
+			int id = Integer.parseInt(request.getParameter("id"));
+			DAO db = new DAO();
+			byte[] photo = db.getGadgetPhoto(photo_no, id);
 			db.closeConnection();
 			response.getOutputStream().write(photo);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}

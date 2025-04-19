@@ -18,19 +18,21 @@ public class ChangeEnquiryStatus extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-			int id=Integer.parseInt(request.getParameter("id"));
-			String status=request.getParameter("status");
-			DAO db=new DAO();
+			int id = Integer.parseInt(request.getParameter("id"));
+			String status = request.getParameter("status");
+			DAO db = new DAO();
 			db.changeEnquiryStatus(id, status);
 			db.closeConnection();
-			HttpSession session=request.getSession();
+			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Status Updation Success !");
 			response.sendRedirect("AdminHome.jsp");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}

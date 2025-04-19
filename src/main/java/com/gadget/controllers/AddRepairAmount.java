@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.gadget.model.DAO;
 import com.gadget.model.SendMail;
+
 /**
  * Servlet implementation class AdminLogin
  */
@@ -18,31 +19,32 @@ public class AddRepairAmount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-			int repair_amount=Integer.parseInt(request.getParameter("amount"));
-			int id=Integer.parseInt(request.getParameter("id"));
+			int repair_amount = Integer.parseInt(request.getParameter("amount"));
+			int id = Integer.parseInt(request.getParameter("id"));
 			String status = request.getParameter("status");
-			String email=request.getParameter("email");
-			DAO db=new DAO();
+			String email = request.getParameter("email");
+			DAO db = new DAO();
 			db.addRepairAmount(id, repair_amount);
 			db.changeGadgetStatus(id, status);
 			db.closeConnection();
-			String body="";
-			if(status.equalsIgnoreCase("WaitingApproval")) 
-			 {
-				body="Your Gadget repair amount is Quoted, Please Accept or Declinr for further Process.";
+			String body = "";
+			if (status.equalsIgnoreCase("WaitingApproval")) {
+				body = "Your Gadget repair amount is Quoted, Please Accept or Declinr for further Process.";
 			}
-			//mail send code
+			// mail send code
 			SendMail.sendMail(email, "Gadget Repair Request Status", body);
-			//mail send code --end
-			
-			HttpSession session=request.getSession();
+			// mail send code --end
+
+			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Repair Amount Quoted Success!");
 			response.sendRedirect("RepairExpertHome.jsp");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}

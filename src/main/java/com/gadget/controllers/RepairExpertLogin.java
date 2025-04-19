@@ -18,25 +18,27 @@ public class RepairExpertLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
 		try {
-			DAO db=new DAO();
-			String name=db.repairExpertLogin(email, password);
+			DAO db = new DAO();
+			String name = db.repairExpertLogin(email, password);
 			db.closeConnection();
-			HttpSession session=request.getSession();
-			if(name==null) {
+			HttpSession session = request.getSession();
+			if (name == null) {
 				session.setAttribute("msg", "Invalid Entries!");
 				response.sendRedirect("index.jsp");
-			}else{
+			} else {
 				session.setAttribute("repair_expert_name", name);
 				session.setAttribute("repair_expert_email", email);
 				response.sendRedirect("RepairExpertHome.jsp");
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}

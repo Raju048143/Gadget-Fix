@@ -10,76 +10,86 @@ public class DAO {
 
 	public DAO() throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		c=DriverManager.getConnection("jdbc:mysql://localhost:3306/gadgetfix","root","Incapp@12");
+		c = DriverManager.getConnection("jdbc:mysql://localhost:3306/gadgetfix", "root", "Incapp@12");
 	}
-	
-	public void closeConnection() throws SQLException  {
+
+	public void closeConnection() throws SQLException {
 		c.close();
 	}
-	public String adminLogin(String email,String password) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from admin where email=? and password=?");
+
+	public String adminLogin(String email, String password) throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from admin where email=? and password=?");
 		p.setString(1, email);
 		p.setString(2, password);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
 			return rs.getString("name");
-		}else {
-			return null;
-		}
-	}
-	public String repairExpertLogin(String email,String password) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from repair_experts where email=? and password=? and status='Active'");
-		p.setString(1, email);
-		p.setString(2, password);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
-			return rs.getString("name");
-		}else {
+		} else {
 			return null;
 		}
 	}
 
-	public String userSignIn(String email,String password) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from users where email=? and password=?");
+	public String repairExpertLogin(String email, String password) throws SQLException {
+		PreparedStatement p = c
+				.prepareStatement("select * from repair_experts where email=? and password=? and status='Active'");
 		p.setString(1, email);
 		p.setString(2, password);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
 			return rs.getString("name");
-		}else {
+		} else {
 			return null;
 		}
 	}
-	public boolean checkRepairExpertPassword(String email) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from repair_experts where email=? and password='password'");
+
+	public String userSignIn(String email, String password) throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from users where email=? and password=?");
 		p.setString(1, email);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
+		p.setString(2, password);
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
+			return rs.getString("name");
+		} else {
+			return null;
+		}
+	}
+
+	public boolean checkRepairExpertPassword(String email) throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from repair_experts where email=? and password='password'");
+		p.setString(1, email);
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	public void addEnquiry(String name, String phone)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("insert into enquiries (name,phone,status,e_date) values (?,?,'Pending',CURRENT_DATE)");
+
+	public void addEnquiry(String name, String phone) throws SQLException {
+		PreparedStatement p = c.prepareStatement(
+				"insert into enquiries (name,phone,status,e_date) values (?,?,'Pending',CURRENT_DATE)");
 		p.setString(1, name);
 		p.setString(2, phone);
 		p.executeUpdate();
 	}
-	public void addrepairEnquiry(String name, String phone)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("insert into repairenquiry (name,phone,status,e_date) values (?,?,'Pending',CURRENT_DATE)");
+
+	public void addrepairEnquiry(String name, String phone) throws SQLException {
+		PreparedStatement p = c.prepareStatement(
+				"insert into repairenquiry (name,phone,status,e_date) values (?,?,'Pending',CURRENT_DATE)");
 		p.setString(1, name);
 		p.setString(2, phone);
 		p.executeUpdate();
 	}
-	public void addRepairAmount(int id,int repair_amount)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("update gadgets set repair_amount=?  where id=?");
+
+	public void addRepairAmount(int id, int repair_amount) throws SQLException {
+		PreparedStatement p = c.prepareStatement("update gadgets set repair_amount=?  where id=?");
 		p.setInt(1, repair_amount);
 		p.setInt(2, id);
 		p.executeUpdate();
 	}
-	public String userSignUp(String name, String phone,String email,String password)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("insert into users (email,name,phone,password) values (?,?,?,?)");
+
+	public String userSignUp(String name, String phone, String email, String password) throws SQLException {
+		PreparedStatement p = c.prepareStatement("insert into users (email,name,phone,password) values (?,?,?,?)");
 		p.setString(1, email);
 		p.setString(2, name);
 		p.setString(3, phone);
@@ -87,12 +97,15 @@ public class DAO {
 		try {
 			p.executeUpdate();
 			return "success";
-		}catch (SQLIntegrityConstraintViolationException e) {
+		} catch (SQLIntegrityConstraintViolationException e) {
 			return "Email Already Exist !";
 		}
 	}
-	public String addRepairExpert(String name, String phone, String email, String state, String city, String area, InputStream photo)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("insert into repair_experts (email,name,phone,state,city,area,photo,status,password) values (?,?,?,?,?,?,?,'Active','password')");
+
+	public String addRepairExpert(String name, String phone, String email, String state, String city, String area,
+			InputStream photo) throws SQLException {
+		PreparedStatement p = c.prepareStatement(
+				"insert into repair_experts (email,name,phone,state,city,area,photo,status,password) values (?,?,?,?,?,?,?,'Active','password')");
 		p.setString(1, email);
 		p.setString(2, name);
 		p.setString(3, phone);
@@ -103,7 +116,7 @@ public class DAO {
 		try {
 			p.executeUpdate();
 			return "Registration Success !";
-		}catch (SQLIntegrityConstraintViolationException e) {
+		} catch (SQLIntegrityConstraintViolationException e) {
 			return "Email Already Exist !";
 		}
 	}
@@ -136,83 +149,88 @@ public class DAO {
 
 				PreparedStatement statusStmt = c.prepareStatement(statusSQL);
 				statusStmt.setInt(1, gadgetId);
-				statusStmt.setString(2,"Pending");
+				statusStmt.setString(2, "Pending");
 				statusStmt.executeUpdate();
 			} else {
 				throw new SQLException("Creating gadget failed, no ID obtained.");
 			}
 			c.commit();
 		} catch (SQLException e) {
-			c.rollback(); 
+			c.rollback();
 			throw e;
 		} finally {
 			c.setAutoCommit(true);
 		}
 	}
 
-	public void changeEnquiryStatus(int id, String status)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("update enquiries set status=? where id=?");
+	public void changeEnquiryStatus(int id, String status) throws SQLException {
+		PreparedStatement p = c.prepareStatement("update enquiries set status=? where id=?");
 		p.setString(1, status);
 		p.setInt(2, id);
 		p.executeUpdate();
 	}
-	public void deleteGadget(int id)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("delete from gadgets where id=? and status='pending'");	
+
+	public void deleteGadget(int id) throws SQLException {
+		PreparedStatement p = c.prepareStatement("delete from gadgets where id=? and status='pending'");
 		p.setInt(1, id);
 		p.executeUpdate();
 	}
-	public void changeGadgetStatus(int id, String status)  throws SQLException{
-		PreparedStatement p=null;
-		if(status.equalsIgnoreCase("accept")) {
-			p=c.prepareStatement("update status set status=?,approved = now() where id=?");
-		}else if(status.equalsIgnoreCase("WaitingApproval")) {
-			p=c.prepareStatement("update status set status=?, amount_rec = now() where id=?");
-		}else if(status.equalsIgnoreCase("decline")) {
-			p=c.prepareStatement("update status set status=?, approved = now() where id=?");
-		}else if(status.equalsIgnoreCase("received")) {
-			p=c.prepareStatement("update status set status=?, received = now() where id=?");
-		}else if(status.equalsIgnoreCase("repaired")) {
-			p=c.prepareStatement("update status set status=?, repaired = now() where id=?");
-		}else if(status.equalsIgnoreCase("delivered")) {
-			p=c.prepareStatement("update status set status=?, delivered = now() where id=?");
-		}else if(status.equalsIgnoreCase("confirmed")) {
-			p=c.prepareStatement("update status set status=?, confirmed = now() where id=?");
-		}else if(status.equalsIgnoreCase("repairing")) {
-			p=c.prepareStatement("update status set status=? where id=?");
+
+	public void changeGadgetStatus(int id, String status) throws SQLException {
+		PreparedStatement p = null;
+		if (status.equalsIgnoreCase("accept")) {
+			p = c.prepareStatement("update status set status=?,approved = now() where id=?");
+		} else if (status.equalsIgnoreCase("WaitingApproval")) {
+			p = c.prepareStatement("update status set status=?, amount_rec = now() where id=?");
+		} else if (status.equalsIgnoreCase("decline")) {
+			p = c.prepareStatement("update status set status=?, approved = now() where id=?");
+		} else if (status.equalsIgnoreCase("received")) {
+			p = c.prepareStatement("update status set status=?, received = now() where id=?");
+		} else if (status.equalsIgnoreCase("repaired")) {
+			p = c.prepareStatement("update status set status=?, repaired = now() where id=?");
+		} else if (status.equalsIgnoreCase("delivered")) {
+			p = c.prepareStatement("update status set status=?, delivered = now() where id=?");
+		} else if (status.equalsIgnoreCase("confirmed")) {
+			p = c.prepareStatement("update status set status=?, confirmed = now() where id=?");
+		} else if (status.equalsIgnoreCase("repairing")) {
+			p = c.prepareStatement("update status set status=? where id=?");
 		}
-		
+
 		p.setString(1, status);
 		p.setInt(2, id);
 		p.executeUpdate();
 	}
-	public void changeRepairExpertStatus(String email, String status)  throws SQLException{
-		PreparedStatement p=c.prepareStatement("update repair_experts set status=? where email=?");
+
+	public void changeRepairExpertStatus(String email, String status) throws SQLException {
+		PreparedStatement p = c.prepareStatement("update repair_experts set status=? where email=?");
 		p.setString(1, status);
 		p.setString(2, email);
 		p.executeUpdate();
 	}
 
-	public boolean changePassword(String old_password,String new_password,String email,String type)  throws SQLException{
-		PreparedStatement p=null;
-		if(type.equalsIgnoreCase("repair_expert")) {
-			p=c.prepareStatement("update repair_experts set password=? where email=? and password=?");
+	public boolean changePassword(String old_password, String new_password, String email, String type)
+			throws SQLException {
+		PreparedStatement p = null;
+		if (type.equalsIgnoreCase("repair_expert")) {
+			p = c.prepareStatement("update repair_experts set password=? where email=? and password=?");
 		}
 		p.setString(1, new_password);
 		p.setString(2, email);
 		p.setString(3, old_password);
-		int x=p.executeUpdate();
-		if(x==0) {
+		int x = p.executeUpdate();
+		if (x == 0) {
 			return false;
-		}else {
+		} else {
 			return true;
 		}
 	}
-	public ArrayList<HashMap> getAllEnquiries() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from enquiries order by enquery_date DESC");
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> enquiries=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> enquiry=new HashMap<>();
+
+	public ArrayList<HashMap> getAllEnquiries() throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from enquiries order by enquery_date DESC");
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> enquiries = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> enquiry = new HashMap<>();
 			enquiry.put("id", rs.getInt("id"));
 			enquiry.put("name", rs.getString("name"));
 			enquiry.put("phone", rs.getString("phone"));
@@ -222,27 +240,29 @@ public class DAO {
 		}
 		return enquiries;
 	}
-	public ArrayList<HashMap>getusers() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from users ");
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> enquiries=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> enquiry=new HashMap<>();
+
+	public ArrayList<HashMap> getusers() throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from users ");
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> enquiries = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> enquiry = new HashMap<>();
 
 			enquiry.put("name", rs.getString("name"));
 			enquiry.put("email", rs.getString("email"));
 			enquiry.put("phone", rs.getString("phone"));
-		
+
 			enquiries.add(enquiry);
 		}
 		return enquiries;
 	}
-	public ArrayList<HashMap> getAllGadgetRequest() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id");
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> enquiries=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> enquiry=new HashMap<>();
+
+	public ArrayList<HashMap> getAllGadgetRequest() throws SQLException {
+		PreparedStatement p = c.prepareStatement("select g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id");
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> enquiries = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> enquiry = new HashMap<>();
 			enquiry.put("id", rs.getInt("id"));
 			enquiry.put("name", rs.getString("name"));
 			enquiry.put("status", rs.getString("status"));
@@ -250,12 +270,13 @@ public class DAO {
 		}
 		return enquiries;
 	}
-	public ArrayList<HashMap> getAllRepairExperts() throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from repair_experts order by name ASC");
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> repairExperts=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> repairExpert=new HashMap<>();
+
+	public ArrayList<HashMap> getAllRepairExperts() throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from repair_experts order by name ASC");
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> repairExperts = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> repairExpert = new HashMap<>();
 			repairExpert.put("name", rs.getString("name"));
 			repairExpert.put("phone", rs.getString("phone"));
 			repairExpert.put("email", rs.getString("email"));
@@ -264,19 +285,23 @@ public class DAO {
 		}
 		return repairExperts;
 	}
-	public ArrayList<HashMap> getAllRepairRequestsByEmail(String type,String email) throws SQLException{
+
+	public ArrayList<HashMap> getAllRepairRequestsByEmail(String type, String email) throws SQLException {
 		PreparedStatement p;
-		if(type.equalsIgnoreCase("user")) {
-			p=c.prepareStatement("SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.user_email = ? ORDER BY g.id DESC");;
-		}else {
-			p=c.prepareStatement("select * from gadgets where repair_expert_email=? order by id DESC");
-			p=c.prepareStatement("SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.repair_expert_email = ? ORDER BY g.id DESC");
+		if (type.equalsIgnoreCase("user")) {
+			p = c.prepareStatement(
+					"SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.user_email = ? ORDER BY g.id DESC");
+			;
+		} else {
+			p = c.prepareStatement("select * from gadgets where repair_expert_email=? order by id DESC");
+			p = c.prepareStatement(
+					"SELECT g.*, s.status FROM gadgets g JOIN status s ON g.id = s.id WHERE g.repair_expert_email = ? ORDER BY g.id DESC");
 		}
 		p.setString(1, email);
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> gadgets=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> gadget=new HashMap<>();
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> gadgets = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> gadget = new HashMap<>();
 			gadget.put("id", rs.getInt("id"));
 			gadget.put("name", rs.getString("name"));
 			gadget.put("brand_name", rs.getString("brand_name"));
@@ -284,22 +309,21 @@ public class DAO {
 			gadget.put("repair_amount", rs.getString("repair_amount"));
 			gadget.put("user_email", rs.getString("user_email"));
 			gadget.put("address", rs.getString("address"));
-			gadget.put("repair_expert_email", rs.getString("repair_expert_email"));	
+			gadget.put("repair_expert_email", rs.getString("repair_expert_email"));
 			gadget.put("status", rs.getString("status"));
 			gadgets.add(gadget);
 		}
 		return gadgets;
 	}
-	public ArrayList<HashMap> getAllRepairRequestsById(int id) throws SQLException{
-		PreparedStatement 		p=c.prepareStatement("SELECT * FROM gadgets " +
-			    "JOIN status ON gadgets.id = status.id " +
-			    "WHERE gadgets.id = ? " +
-			    "ORDER BY gadgets.id DESC");
+
+	public ArrayList<HashMap> getAllRepairRequestsById(int id) throws SQLException {
+		PreparedStatement p = c.prepareStatement("SELECT * FROM gadgets " + "JOIN status ON gadgets.id = status.id "
+				+ "WHERE gadgets.id = ? " + "ORDER BY gadgets.id DESC");
 		p.setInt(1, id);
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> gstatus=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> gadget=new HashMap<>();
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> gstatus = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> gadget = new HashMap<>();
 			gadget.put("id", rs.getInt("id"));
 			gadget.put("name", rs.getString("name"));
 			gadget.put("brand_name", rs.getString("brand_name"));
@@ -313,19 +337,20 @@ public class DAO {
 			gadget.put("approved", rs.getString("approved"));
 			gadget.put("received", rs.getString("received"));
 			gadget.put("repaired", rs.getString("repaired"));
-			gadget.put("delivered", rs.getString("delivered"));	
-			gadget.put("confirmed", rs.getString("confirmed"));	
+			gadget.put("delivered", rs.getString("delivered"));
+			gadget.put("confirmed", rs.getString("confirmed"));
 			gstatus.add(gadget);
 		}
 		return gstatus;
 	}
-	public ArrayList<HashMap> getAllRepairRequests() throws SQLException{
-		PreparedStatement 		p=c.prepareStatement("select * from gadgets  order by id DESC");
 
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> gstatus=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> gadget=new HashMap<>();
+	public ArrayList<HashMap> getAllRepairRequests() throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from gadgets  order by id DESC");
+
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> gstatus = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> gadget = new HashMap<>();
 			gadget.put("id", rs.getInt("id"));
 			gadget.put("name", rs.getString("name"));
 			gadget.put("brand_name", rs.getString("brand_name"));
@@ -339,21 +364,23 @@ public class DAO {
 			gadget.put("approved", rs.getString("approved"));
 			gadget.put("received", rs.getString("received"));
 			gadget.put("repaired", rs.getString("repaired"));
-			gadget.put("delivered", rs.getString("delivered"));		
+			gadget.put("delivered", rs.getString("delivered"));
 			gstatus.add(gadget);
 		}
 		return gstatus;
 	}
 
-	public ArrayList<HashMap> getAllRepairExpertsByStateCityArea(String state,String city,String area) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from repair_experts where state=? and city=? and area like ? order by name ASC");
+	public ArrayList<HashMap> getAllRepairExpertsByStateCityArea(String state, String city, String area)
+			throws SQLException {
+		PreparedStatement p = c.prepareStatement(
+				"select * from repair_experts where state=? and city=? and area like ? order by name ASC");
 		p.setString(1, state);
 		p.setString(2, city);
-		p.setString(3, "%"+area+"%");
-		ResultSet rs=p.executeQuery();
-		ArrayList<HashMap> repairExperts=new ArrayList<>();
-		while(rs.next()) {
-			HashMap<String,Object> repairExpert=new HashMap<>();
+		p.setString(3, "%" + area + "%");
+		ResultSet rs = p.executeQuery();
+		ArrayList<HashMap> repairExperts = new ArrayList<>();
+		while (rs.next()) {
+			HashMap<String, Object> repairExpert = new HashMap<>();
 			repairExpert.put("name", rs.getString("name"));
 			repairExpert.put("phone", rs.getString("phone"));
 			repairExpert.put("email", rs.getString("email"));
@@ -365,12 +392,13 @@ public class DAO {
 		}
 		return repairExperts;
 	}
-	public HashMap getRepairExpertDetails(String email) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select * from repair_experts where email=?");
+
+	public HashMap getRepairExpertDetails(String email) throws SQLException {
+		PreparedStatement p = c.prepareStatement("select * from repair_experts where email=?");
 		p.setString(1, email);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
-			HashMap<String,Object> repairExpert=new HashMap<>();
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
+			HashMap<String, Object> repairExpert = new HashMap<>();
 			repairExpert.put("name", rs.getString("name"));
 			repairExpert.put("phone", rs.getString("phone"));
 			repairExpert.put("email", rs.getString("email"));
@@ -379,35 +407,35 @@ public class DAO {
 			repairExpert.put("area", rs.getString("area"));
 			repairExpert.put("status", rs.getString("status"));
 			return repairExpert;
-		}else {
-			return null;
-		}
-	}
-	
-	public byte[] getPhoto(String type,String email) throws SQLException{
-		PreparedStatement p=null;
-		if(type.equalsIgnoreCase("repair_expert")) {
-			p=c.prepareStatement("select photo from repair_experts where email=?");
-			p.setString(1, email);
-		}
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
-			return rs.getBytes("photo");
-		}else {
+		} else {
 			return null;
 		}
 	}
 
-	public byte[] getGadgetPhoto(int photo_no,int id) throws SQLException{
-		PreparedStatement p=c.prepareStatement("select photo1,photo2 from gadgets where id=?");
+	public byte[] getPhoto(String type, String email) throws SQLException {
+		PreparedStatement p = null;
+		if (type.equalsIgnoreCase("repair_expert")) {
+			p = c.prepareStatement("select photo from repair_experts where email=?");
+			p.setString(1, email);
+		}
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
+			return rs.getBytes("photo");
+		} else {
+			return null;
+		}
+	}
+
+	public byte[] getGadgetPhoto(int photo_no, int id) throws SQLException {
+		PreparedStatement p = c.prepareStatement("select photo1,photo2 from gadgets where id=?");
 		p.setInt(1, id);
-		ResultSet rs=p.executeQuery();
-		if(rs.next()) {
-			if(photo_no==1)
+		ResultSet rs = p.executeQuery();
+		if (rs.next()) {
+			if (photo_no == 1)
 				return rs.getBytes("photo1");
 			else
 				return rs.getBytes("photo2");
-		}else {
+		} else {
 			return null;
 		}
 	}

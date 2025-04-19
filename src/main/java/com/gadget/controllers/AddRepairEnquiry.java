@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 
 import com.gadget.model.DAO;
 
-
 /**
  * Servlet implementation class AdminLogin
  */
@@ -19,19 +18,21 @@ public class AddRepairEnquiry extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name=request.getParameter("name");
-		String phone=request.getParameter("phone");
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String phone = request.getParameter("phone");
 		try {
-			DAO db=new DAO();
+			DAO db = new DAO();
 			db.addrepairEnquiry(name, phone);
 			db.closeConnection();
-			HttpSession session=request.getSession();
+			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Thanks for Contacting us..! We Will Contact You Soon...!");
 			response.sendRedirect("UserHome.jsp");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}
