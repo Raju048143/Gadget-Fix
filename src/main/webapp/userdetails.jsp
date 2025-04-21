@@ -2,11 +2,11 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.gadget.model.DAO"%>
 <%
-	String admin_name=(String)session.getAttribute("admin_name");
-	if(admin_name==null){
-		session.setAttribute("msg", "Please Login First!");
-		response.sendRedirect("index.jsp");
-	}else{
+String admin_name = (String) session.getAttribute("admin_name");
+if (admin_name == null) {
+	session.setAttribute("msg", "Please Login First!");
+	response.sendRedirect("index.jsp");
+} else {
 %>
 <!DOCTYPE html>
 <html>
@@ -17,24 +17,6 @@
 </head>
 
 <body>
-	<%
-		String msg=(String)session.getAttribute("msg");
-		if(msg!=null && msg.contains("Success")){
-	%>
-	<div class="alert alert-success text-center" role="alert">
-		<%= msg %>
-	</div>
-	<%		  
-			session.setAttribute("msg", null);
-		}else if(msg!=null){
-	%>
-	<div class="alert alert-danger text-center" role="alert">
-		<%= msg %>
-	</div>
-	<%		  
-			session.setAttribute("msg", null);
-		}
-	%>
 	<%@ include file="resources/jspFile/info.jsp"%>
 	<nav class="navbar navbar-expand-sm bg-light">
 		<a href="index.jsp" id="logo" class="navbar-brand"> <img
@@ -46,14 +28,11 @@
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="AdminHome.jsp">Home</a></li>
 				<li><a href="RepairExperts.jsp">RepairExperts</a></li>
 				<li><a href="userdetails.jsp">Users</a></li>
 				<li><a href="RepairedGadget.jsp">RepairedGadget</a></li>
-
-				<li>Welcome: <b><%= admin_name %></b>
+				<li>Welcome: <b><%=admin_name%></b>
 				</li>
 				<li><a href="Logout" class="text-danger">Logout</a></li>
 			</ul>
@@ -62,11 +41,10 @@
 
 	<div>
 		<%
-  	DAO db=new DAO();
-  	ArrayList<HashMap> users=db.getusers();
-	db.closeConnection();
-	if(users.size()!= 0)
-	{
+		DAO db = new DAO();
+		ArrayList<HashMap> users = db.getusers();
+		db.closeConnection();
+		if (users.size() != 0) {
 		%>
 		<h4 class="bg-primary text-white text-center p-2 mt-3">All Users:</h4>
 		<div class="container-fluid mt-3">
@@ -80,21 +58,21 @@
 				</thead>
 				<tbody class=" bg-light">
 					<%
-						for (HashMap user : users) {
-						%>
+					for (HashMap user : users) {
+					%>
 					<tr>
-						<td><%= user.get("name")%></td>
-						<td><%= user.get("email")%></td>
-						<td><%= user.get("phone")%></td>
+						<td><%=user.get("name")%></td>
+						<td><%=user.get("email")%></td>
+						<td><%=user.get("phone")%></td>
 					</tr>
 					<%
-						}
-						%>
+					}
+					%>
 				</tbody>
 			</table>
 		</div>
 		<%
-	}else{
+		} else {
 		%>
 		<div class="d-flex justify-content-center align-items-center"
 			style="min-height: 80vh;">
@@ -105,8 +83,8 @@
 		</div>
 
 		<%
-	}
-  %>
+		}
+		%>
 	</div>
 	<footer class="bg-dark p-2 text-white text-center">
 		<p>&copy; Rights Reserved.</p>
@@ -115,18 +93,20 @@
 
 </body>
 <script>
-    AOS.init();
-    //script for scroll to top
-    $("#top-button").click(function () {
-        $("html, body").animate({scrollTop: 0}, 1000);
-    });
-    //script for light box
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
+	AOS.init();
+	//script for scroll to top
+	$("#top-button").click(function() {
+		$("html, body").animate({
+			scrollTop : 0
+		}, 1000);
+	});
+	//script for light box
+	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+		event.preventDefault();
+		$(this).ekkoLightbox();
+	});
 </script>
 </html>
-<%		
-	}
+<%
+}
 %>

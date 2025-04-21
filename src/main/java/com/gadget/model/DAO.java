@@ -67,7 +67,7 @@ public class DAO {
 
 	public void addEnquiry(String name, String phone) throws SQLException {
 		PreparedStatement p = c.prepareStatement(
-				"insert into enquiries (name,phone,status,e_date) values (?,?,'Pending',CURRENT_DATE)");
+				"insert into enquiries (name,phone,status,enquery_date) values (?,?,'Pending',CURRENT_DATE)");
 		p.setString(1, name);
 		p.setString(2, phone);
 		p.executeUpdate();
@@ -235,7 +235,7 @@ public class DAO {
 			enquiry.put("name", rs.getString("name"));
 			enquiry.put("phone", rs.getString("phone"));
 			enquiry.put("status", rs.getString("status"));
-			enquiry.put("e_date", rs.getDate("enquery_date"));
+			enquiry.put("enquery_date", rs.getDate("enquery_date"));
 			enquiries.add(enquiry);
 		}
 		return enquiries;

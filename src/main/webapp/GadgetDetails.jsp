@@ -17,24 +17,6 @@ if (admin_name == null) {
 </head>
 
 <body>
-	<%
-	String msg = (String) session.getAttribute("msg");
-	if (msg != null && msg.contains("Success")) {
-	%>
-	<div class="alert alert-success text-center" role="alert">
-		<%=msg%>
-	</div>
-	<%
-	session.setAttribute("msg", null);
-	} else if (msg != null) {
-	%>
-	<div class="alert alert-danger text-center" role="alert">
-		<%=msg%>
-	</div>
-	<%
-	session.setAttribute("msg", null);
-	}
-	%>
 	<%@ include file="resources/jspFile/info.jsp"%>
 	<nav class="navbar navbar-expand-sm bg-light">
 		<a href="index.jsp" id="logo" class="navbar-brand"> <img
@@ -46,8 +28,6 @@ if (admin_name == null) {
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="AdminHome.jsp">Home</a></li>
 				<li><a href="RepairExperts.jsp">RepairExperts</a></li>
 				<li><a href="RepairedGadget.jsp">RepairedGadget</a></li>
@@ -61,114 +41,147 @@ if (admin_name == null) {
 	<h4 class="bg-primary text-white text-center p-2">Gadget Details</h4>
 	<div class="bg-light p-2 m-2">
 		<%
+	 	DAO db=new DAO();
 		int id = Integer.parseInt(request.getParameter("id"));
-		DAO db = new DAO();
 		ArrayList<HashMap> gstatus = db.getAllRepairRequestsById(id);
 		db.closeConnection();
-		String status = request.getParameter("status");
 		for (HashMap gsg : gstatus) {
+			String status = (String) gsg.get("status");
 		%>
 		<section class="Container">
-			<div class="row bg-info rounded m-2 p-2">
-				<div class="col-sm ">
-					Gadget Id:&nbsp;&nbsp;<b><%=gsg.get("id")%></b><br> Gadget
-					Name:&nbsp;&nbsp;<b><%=gsg.get("name")%></b><br> Gadget
-					Brand name:&nbsp;&nbsp;<b><%=gsg.get("brand_name")%></b><br>
-					Gadget Repaired amount:&nbsp;&nbsp;<b><%=gsg.get("repair_amount")%></b><br>
-					Gadget Request User Id:&nbsp;&nbsp;<b><%=gsg.get("user_email")%></b><br>
-					Gadget Repair Expert Id:&nbsp;&nbsp;<b><%=gsg.get("repair_expert_email")%></b><br>
-				</div>
+			<div class="row rounded m-2 p-2">
 				<div class="col-sm">
 					<div class="row">
 						<div class="col-sm">
 							<img class="w-100 m-2" alt=""
 								src="GetGadgetPhoto?photo_no=1&id=<%=gsg.get("id")%>"
-								height="100px">
+								height="250px">
 						</div>
 						<div class="col-sm m-2">
 							<img class="w-100 " alt=""
 								src="GetGadgetPhoto?photo_no=2&id=<%=gsg.get("id")%>"
-								height="100px">
+								height="250px">
 						</div>
 					</div>
 					<div class="bg-light">
 						Problem: <b><%=gsg.get("problem")%></b>
 					</div>
+					Gadget Id:&nbsp;&nbsp;<b><%=gsg.get("id")%></b><br> Gadget
+					Name:&nbsp;&nbsp;<b><%=gsg.get("name")%></b><br> Gadget Brand
+					name:&nbsp;&nbsp;<b><%=gsg.get("brand_name")%></b><br> Gadget
+					Repaired amount:&nbsp;&nbsp;<b><%=gsg.get("repair_amount")%></b><br>
+					Gadget Request User Id:&nbsp;&nbsp;<b><%=gsg.get("user_email")%></b><br>
+					Gadget Repair Expert Id:&nbsp;&nbsp;<b><%=gsg.get("repair_expert_email")%></b><br>
 				</div>
-			</div>
-			<div class="col-sm m-3">
-				<%
-				if (status.equalsIgnoreCase("pending")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("WaitingApproval")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-				Confirmed:<b><%=gsg.get("requested")%></b> &nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("accept")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-				&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("decline")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-				&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Decline:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("received")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-				&nbsp;&nbsp;Current Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("repaired")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-				&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-				&nbsp;&nbsp;Repaired:<b><%=gsg.get("repaired")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("delivered")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-				Confirmed:<b><%=gsg.get("requested")%></b> &nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>
-				&nbsp;&nbsp;Repaired:<b><%=gsg.get("repaired")%></b>&nbsp;&nbsp;Delivered:<b><%=gsg.get("delivered")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
+				<div class="col-sm ">
 
-				<%
-				} else if (status.equalsIgnoreCase("confirmed")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Request
-				Confirmed:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				} else if (status.equalsIgnoreCase("repairing")) {
-				%>
-				Status: &nbsp;&nbsp;Requested:<b><%=gsg.get("requested")%></b>
-				&nbsp;&nbsp;Request Confirmed:<b><%=gsg.get("requested")%></b>&nbsp;&nbsp;Received:<b><%=gsg.get("received")%></b>&nbsp;&nbsp;Amount
-				Received:<b><%=gsg.get("amount_rec")%></b>&nbsp;&nbsp;Approved:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Repairing:<b><%=gsg.get("approved")%></b>&nbsp;&nbsp;Current
-				Status:<b><%=gsg.get("status")%></b>
-				<%
-				}
-				%>
+					<div class="col-sm m-3 text-center">
+						<%
+						if (status.equalsIgnoreCase("pending")) {
+						%>
+						<i class="fas fa-hourglass-half"></i>
+						<!-- Pending Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("WaitingApproval")) {
+						%>
+						<i class="fas fa-clock"></i>
+						<!-- Waiting Approval Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Amount Received:
+						<b><%=gsg.get("amount_rec")%></b><br /> Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("accept")) {
+						%>
+						<i class="fas fa-check-circle"></i>
+						<!-- Accepted Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Amount Received:
+						<b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
+						Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("decline")) {
+						%>
+						<i class="fas fa-times-circle"></i>
+						<!-- Declined Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Amount Received:
+						<b><%=gsg.get("amount_rec")%></b><br /> Decline: <b><%=gsg.get("approved")%></b><br />
+						Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("received")) {
+						%>
+						<i class="fas fa-download"></i>
+						<!-- Received Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("repaired")) {
+						%>
+						<i class="fas fa-wrench"></i>
+						<!-- Repaired Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br /> Amount
+						Received: <b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Repaired: <b><%=gsg.get("repaired")%></b><br />
+						Current Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("delivered")) {
+						%>
+						<i class="fas fa-truck"></i>
+						<!-- Delivered Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br /> Amount
+						Received: <b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Repaired: <b><%=gsg.get("repaired")%></b><br />
+						Delivered: <b><%=gsg.get("delivered")%></b><br /> Current Status:
+						<b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("confirmed")) {
+						%>
+						<i class="fas fa-check"></i>
+						<!-- Confirmed Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br /> Current
+						Status: <b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("repairing")) {
+						%>
+						<i class="fas fa-tools"></i>
+						<!-- Repairing Icon -->
+						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> Amount Received:
+						<b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
+						Repairing: <b><%=gsg.get("approved")%></b><br /> Current Status:
+						<b><%=gsg.get("status")%></b>
+						<hr />
+						<%
+						}
+						%>
+					</div>
+				</div>
+
 			</div>
+
 		</section>
 		<%
 		}
 		%>
 
 	</div>
-
 
 	<footer class="bg-dark p-2 text-white text-center">
 		<p>&copy; Rights Reserved.</p>

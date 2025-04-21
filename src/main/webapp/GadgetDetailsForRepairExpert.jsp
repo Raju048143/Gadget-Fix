@@ -265,6 +265,6 @@ if (repair_expert_name == null) {
 	});
 </script>
 </html>
-<%		
-	}
+<%
+}
 %>

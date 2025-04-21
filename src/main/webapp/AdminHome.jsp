@@ -17,24 +17,6 @@ if (admin_name == null) {
 </head>
 
 <body>
-	<%
-	String msg = (String) session.getAttribute("msg");
-	if (msg != null && msg.contains("Success")) {
-	%>
-	<div class="alert alert-success text-center" role="alert">
-		<%=msg%>
-	</div>
-	<%
-	session.setAttribute("msg", null);
-	} else if (msg != null) {
-	%>
-	<div class="alert alert-danger text-center" role="alert">
-		<%=msg%>
-	</div>
-	<%
-	session.setAttribute("msg", null);
-	}
-	%>
 	<%@ include file="resources/jspFile/info.jsp"%>
 	<nav class="navbar navbar-expand-sm bg-light">
 		<a href="index.jsp" id="logo" class="navbar-brand"> <img
@@ -46,8 +28,7 @@ if (admin_name == null) {
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
+
 				<li><a href="AdminHome.jsp">Home</a></li>
 				<li><a href="RepairExperts.jsp">RepairExperts</a></li>
 				<li><a href="userdetails.jsp">Users</a></li>
@@ -59,7 +40,35 @@ if (admin_name == null) {
 			</ul>
 		</div>
 	</nav>
+	<%
+    String msg = (String) session.getAttribute("msg");
+if (msg != null && !msg.isEmpty()) { %>
+	<div class="modal fade show" id="msgModal" tabindex="-1" role="dialog"
+		style="display: block; background-color: rgba(0, 0, 0, 0.5);"
+		aria-modal="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content border-0">
+				<div
+					class="modal-header bg-<%=msg.contains("Success") ? "success" : "danger"%> text-white">
+					<h5 class="modal-title">
+						<%=msg.contains("Success") ? "Success" : "Error"%>
+					</h5>
+					<button type="button" class="close text-white"
+						onclick="closeMsgModal()" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body text-center fs-5">
+					<%=msg%>
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<%
+        session.setAttribute("msg", null);
+    }
+    %>
 	<%
 	DAO db = new DAO();
 	ArrayList<HashMap> enquiries = db.getAllEnquiries();
@@ -91,7 +100,7 @@ if (admin_name == null) {
 					<td><%=enquiry.get("name")%></td>
 					<td><%=enquiry.get("phone")%></td>
 					<td><%=enquiry.get("status")%></td>
-					<td><%=enquiry.get("e_date")%></td>
+					<td><%=enquiry.get("enquery_date")%></td>
 					<td>
 						<%
 						if (((String) enquiry.get("status")).equalsIgnoreCase("Pending")) {
@@ -146,6 +155,16 @@ if (admin_name == null) {
 		event.preventDefault();
 		$(this).ekkoLightbox();
 	});
+	
+    function closeMsgModal() {
+        const modal = document.getElementById("msgModal");
+        modal.classList.remove("show");
+        modal.style.display = "none";
+    }
+
+    // Auto close after 3 seconds
+    setTimeout(() => closeMsgModal(), 3000);
+
 </script>
 </html>
 <%
