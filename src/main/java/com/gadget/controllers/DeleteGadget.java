@@ -18,18 +18,20 @@ public class DeleteGadget extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-			int id=Integer.parseInt(request.getParameter("id"));
-			DAO db=new DAO();
+			int id = Integer.parseInt(request.getParameter("id"));
+			DAO db = new DAO();
 			db.deleteGadget(id);
 			db.closeConnection();
-			HttpSession session=request.getSession();
+			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Gadget Repair Request Deletion Success !");
 			response.sendRedirect("UserHome.jsp");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("ExpPage.jsp");
 		}
