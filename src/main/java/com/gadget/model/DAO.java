@@ -171,9 +171,13 @@ public class DAO {
 	}
 
 	public void deleteGadget(int id) throws SQLException {
-		PreparedStatement p = c.prepareStatement("delete from gadgets where id=? and status='pending'");
-		p.setInt(1, id);
-		p.executeUpdate();
+	    PreparedStatement p1 = c.prepareStatement("DELETE FROM status WHERE id = ?");
+	    p1.setInt(1, id);
+	    p1.executeUpdate();
+
+	    PreparedStatement p2 = c.prepareStatement("DELETE FROM gadgets WHERE id = ?");
+	    p2.setInt(1, id);
+	    p2.executeUpdate();
 	}
 
 	public void changeGadgetStatus(int id, String status) throws SQLException {
