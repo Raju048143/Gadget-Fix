@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.gadget.model.DAO;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class GetGadgetPhoto
  */
 @WebServlet("/GetGadgetPhoto")
 public class GetGadgetPhoto extends HttpServlet {

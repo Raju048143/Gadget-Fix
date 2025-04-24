@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import com.gadget.model.DAO;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class AddEnquiry
  */
 @WebServlet("/AddEnquiry")
 public class AddEnquiry extends HttpServlet {

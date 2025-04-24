@@ -12,7 +12,7 @@ import com.gadget.model.DAO;
 import com.gadget.model.SendMail;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class AddRepairAmount
  */
 @WebServlet("/AddRepairAmount")
 public class AddRepairAmount extends HttpServlet {

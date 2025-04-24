@@ -15,7 +15,7 @@ import jakarta.servlet.http.Part;
 import com.gadget.model.DAO;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class AddRepairExpert
  */
 @MultipartConfig
 @WebServlet("/AddRepairExpert")

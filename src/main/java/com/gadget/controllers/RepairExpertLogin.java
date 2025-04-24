@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import com.gadget.model.DAO;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class RepairExpertLogin
  */
 @WebServlet("/RepairExpertLogin")
 public class RepairExpertLogin extends HttpServlet {

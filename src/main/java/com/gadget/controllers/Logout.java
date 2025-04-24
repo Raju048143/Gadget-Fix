@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class AdminLogin
+ * Servlet implementation class Logout
  */
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {
