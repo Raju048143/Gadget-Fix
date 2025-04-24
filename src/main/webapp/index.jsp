@@ -42,8 +42,7 @@
 
 				<li class="nav-item"><a class="nav-link" href="index.jsp">Home</a>
 				</li>
-
-				<!-- Dropdown Menu for Login/Register -->
+				
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="loginDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"

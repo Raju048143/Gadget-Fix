@@ -36,8 +36,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="index.jsp">Home</a></li>
 				<li><a href="User.jsp">User</a></li>
 				<li><a href="" data-toggle="modal" data-target="#admin-Modal">Admin</a>
@@ -58,7 +56,10 @@
 					<input name="email" class="form-control p-2 my-2" type="email"
 						maxlength="100" placeholder="User Email" required /> <input
 						name="password" class="form-control p-2 my-2" type="password"
-						maxlength="20" placeholder="Password" required />
+						maxlength="20" placeholder="Password"
+						pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+							title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character."
+							 required />
 					<button class="btn btn-success my-2">Sign In</button>
 				</form>
 			</div>
@@ -74,7 +75,10 @@
 					<input name="phone" class="form-control p-2 my-2" type="tel"
 						maxlength="10" minlength="10" pattern="[0-9]+" placeholder="Phone"
 						required /> <input name="password" class="form-control p-2 my-2"
-						type="password" maxlength="20" placeholder="Password" required />
+						type="password" maxlength="20" placeholder="Password"
+						pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+							title="Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character."
+							 required />
 					<button class="btn btn-success my-2">Sign Up</button>
 				</form>
 			</div>
