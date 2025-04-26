@@ -97,10 +97,8 @@
 	String area = request.getParameter("area");
 	if (state != null) {
 	%>
-	<h5 class="bg-primary text-white p-3 text-center mt-2">
-		All Repair Experts [<%= area %>,<%= city %>,<%= state %>]
-	</h5>
-	<%
+  		<h5 class="bg-primary text-white p-3 text-center mt-2">All Repair Experts [<%= area %>,<%= city %>,<%= state %>]</h5>
+  <%
 	  	DAO db=new DAO();
 	  	ArrayList<HashMap> repairExperts=db.getAllRepairExpertsByStateCityArea(state,city,area);
 		db.closeConnection();
@@ -108,14 +106,14 @@
 			String status=(String)repairExpert.get("status");
 			if(status.equalsIgnoreCase("active")){
   %>
-	<p class="bg-warning p-2 my-2">
-		Name: <b><%= repairExpert.get("name") %></b> State: <b><%= repairExpert.get("state") %></b>
-		City: <b><%= repairExpert.get("city") %></b> Area: <b><%= repairExpert.get("area") %></b>
-		&nbsp; &nbsp; <a class="btn btn-success btn-sm"
-			href="RepairExpertDetails.jsp?email=<%= repairExpert.get("email") %>">
-			Details </a>
-	</p>
-	<%	
+	  		<p class="bg-warning p-2 my-2"> 
+	  		Name: <b><%= repairExpert.get("name") %></b> 
+	  		State: <b><%= repairExpert.get("state") %></b> 
+	  		City: <b><%= repairExpert.get("city") %></b> 
+	  		Area: <b><%= repairExpert.get("area") %></b> 
+	  		&nbsp; &nbsp; <a class="btn btn-success btn-sm" href="RepairExpertDetails.jsp?email=<%= repairExpert.get("email") %>"> Details </a>
+	  		</p>
+  <%	
 			}
 		}
 	}
@@ -220,30 +218,6 @@
 			class="mx-3" src="resources/nokia.png" alt="" height="50px"> <img
 			class="mx-3" src="resources/samsung.png" alt="" height="50px">
 	</section>
-	<section class="container-fluid my-4" id="gallery">
-		<div class="row">
-			<div class="col p-0">
-				<a href="resources/img1.jpg" data-toggle="lightbox"
-					data-gallery="my-gallery"><img class="img-fluid"
-					src="resources/img1.jpg" alt=""></a>
-			</div>
-			<div class="col p-0">
-				<a href="resources/img2.jpg" data-toggle="lightbox"
-					data-gallery="my-gallery"><img class="img-fluid"
-					src="resources/img2.jpg" alt=""></a>
-			</div>
-			<div class="col p-0">
-				<a href="resources/img3.jpg" data-toggle="lightbox"
-					data-gallery="my-gallery"><img class="img-fluid"
-					src="resources/img3.jpg" alt=""></a>
-			</div>
-			<div class="col p-0">
-				<a href="resources/img4.jpg" data-toggle="lightbox"
-					data-gallery="my-gallery"><img class="img-fluid"
-					src="resources/img4.jpg" alt=""></a>
-			</div>
-		</div>
-	</section>
 	<section class="container my-5 text-center" id="testimonials">
 		<h4>TESTIMONIALS</h4>
 		<div class="row my-5">
@@ -259,7 +233,7 @@
 						GadgetFix proved to be the perfect tool to address my tech-related
 						problems
 					</p>
-					<strong>priyanka Kumari</strong>
+					<strong>Priyanka Kumari</strong>
 				</div>
 			</div>
 			<div class="col-sm">
