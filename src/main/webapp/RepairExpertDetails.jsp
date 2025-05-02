@@ -64,7 +64,7 @@ if (msg != null && !msg.isEmpty()) { %>
         session.setAttribute("msg", null);
     }
     %>
-	<h4 class="bg-primary text-white p-2 text-center ">Repair Expert
+	<h4 class="bg-info text-white p-3 text-center ">Repair Expert
 		Details</h4>
 	<section class="container bg-light mt-5 p-5 rouded">
 		<div class="row">

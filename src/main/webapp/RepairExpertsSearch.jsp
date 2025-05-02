@@ -46,8 +46,6 @@
 		</button>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<ul class="navbar-nav ml-auto">
-				<!-- <ul class="navbar-nav mr-auto"> -->
-				<!-- <ul class="navbar-nav mx-auto"> -->
 				<li><a href="AdminHome.jsp">Home</a></li>
 				<li><a href="RepairExperts.jsp">RepairExperts</a></li>
 				<li>Welcome: <b><%= admin_name %></b>
@@ -56,84 +54,90 @@
 			</ul>
 		</div>
 	</nav>
-	<%
-  	String state=request.getParameter("state");
-	String city=request.getParameter("city");
-	String area=request.getParameter("area");
-  %>
-	<h5 class="bg-primary text-white p-3 text-center mt-2">
-		All Repair Experts [<%= area %>,<%= city %>,<%= state %>]
-	</h5>
-	<%
-  	DAO db=new DAO();
-  	ArrayList<HashMap> repairExperts=db.getAllRepairExpertsByStateCityArea(state,city,area);
-	db.closeConnection();
-	for(HashMap repairExpert:repairExperts){
-  %>
-	<p class="bg-warning p-2 my-2">
-		Name: <b><%= repairExpert.get("name") %></b> Phone: <b><%= repairExpert.get("phone") %></b>
-		State: <b><%= repairExpert.get("state") %></b> &nbsp; &nbsp; <a
-			class="btn btn-success btn-sm"
-			href="RepairExpertDetails.jsp?email=<%= repairExpert.get("email") %>">
-			Details </a>
-	</p>
-	<%		
+<%
+	String state = request.getParameter("state");
+	String city = request.getParameter("city");
+	String area = request.getParameter("area");
+
+	if (state != null && city != null && area != null) {
+		state = state.trim();
+		city = city.trim();
+		area = area.trim();
+
+		DAO db = new DAO();
+		ArrayList<HashMap> repairExperts = db.getAllRepairExpertsByStateCityArea(state, city, area);
+		db.closeConnection();
+
+		// Filter only active experts
+		ArrayList<HashMap<String, String>> activeExperts = new ArrayList<>();
+		for (HashMap<String, String> expert : repairExperts) {
+			String status = expert.get("status");
+			if (status != null && "active".equalsIgnoreCase(status)) {
+				activeExperts.add(expert);
+			}
+		}
+
+		if (!activeExperts.isEmpty()) {
+%>
+			<h5 class="bg-info text-white p-3 text-center">
+				All Repair Experts [<%= area %>, <%= city %>, <%= state %>]
+			</h5>
+			<div class="table-responsive mt-3 text-center">
+				<table class="table table-bordered table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th>Name</th>
+							<th>State</th>
+							<th>City</th>
+							<th>Area</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+							for (HashMap<String, String> expert : activeExperts) {
+						%>
+						<tr>
+							<td><%= expert.get("name") %></td>
+							<td><%= expert.get("state") %></td>
+							<td><%= expert.get("city") %></td>
+							<td><%= expert.get("area") %></td>
+							<td>
+								<a class="btn btn-success btn-sm"
+								   href="RepairExpertDetails.jsp?email=<%= expert.get("email") %>">
+									Details
+								</a>
+							</td>
+						</tr>
+						<%
+							}
+						%>
+					</tbody>
+				</table>
+			</div>
+<%
+		} else {
+%>
+			<p class="text-danger text-center mt-3">
+				No repair experts available in the selected location.
+			</p>
+<%
+		}
+	} else {
+%>
+		<p class="text-warning text-center mt-3">
+			Please select state, city, and area to view repair experts.
+		</p>
+<%
 	}
-  %>
+%>
+
 
 	<footer class="bg-dark p-2 text-white text-center">
 		<p>&copy; Rights Reserved.</p>
 	</footer>
 	<a id="top-button"><i class="fa-solid fa-circle-up"></i></a>
 
-	<!-- Modal -->
-	<div class="modal fade" id="my-Modal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Get In Touch!</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form name="google-sheet">
-						<input name="Name" class="form-control p-4 my-2" type="text"
-							maxlength="20" pattern="[a-zA-Z ]+" placeholder="Your Name"
-							required /> <input name="Phone" class="form-control p-4 my-2"
-							type="tel" maxlength="10" minlength="10" pattern="[0-9]+"
-							placeholder="Your Phone" required />
-						<button class="btn btn-success my-2">Submit</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="admin-Modal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header bg-primary text-white">
-					<h5 class="modal-title" id="exampleModalLabel">AdminLogin!</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form method="post" action="AdminLogin">
-						<input name="id" class="form-control p-4 my-2" type="text"
-							maxlength="20" placeholder="Admin ID" required /> <input
-							name="password" class="form-control p-4 my-2" type="password"
-							maxlength="20" placeholder="Admin Password" required />
-						<button class="btn btn-primary my-2">Submit</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 </body>
 <script>
     AOS.init();

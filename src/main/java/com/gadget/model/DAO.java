@@ -31,10 +31,11 @@ public class DAO {
 	}
 
 	public String repairExpertLogin(String email, String password) throws SQLException {
+		String hashedPassword = hashPassword(password); 
 		PreparedStatement p = c
 				.prepareStatement("select * from repair_experts where email=? and password=? and status='Active'");
 		p.setString(1, email);
-		p.setString(2, password);
+		p.setString(2, hashedPassword);
 		ResultSet rs = p.executeQuery();
 		if (rs.next()) {
 			return rs.getString("name");
@@ -107,8 +108,9 @@ public class DAO {
 
 	public String addRepairExpert(String name, String phone, String email, String state, String city, String area,
 			InputStream photo) throws SQLException {
+		String hashedPassword = hashPassword("Password@12345");
 		PreparedStatement p = c.prepareStatement(
-				"insert into repair_experts (email,name,phone,state,city,area,photo,status,password) values (?,?,?,?,?,?,?,'Active','password')");
+				"insert into repair_experts (email,name,phone,state,city,area,photo,status,password) values (?,?,?,?,?,?,?,'Active',?)");
 		p.setString(1, email);
 		p.setString(2, name);
 		p.setString(3, phone);
@@ -116,6 +118,7 @@ public class DAO {
 		p.setString(5, city);
 		p.setString(6, area);
 		p.setBinaryStream(7, photo);
+		p.setString(8,hashedPassword);
 		try {
 			p.executeUpdate();
 			return "Registration Success !";
@@ -217,13 +220,15 @@ public class DAO {
 
 	public boolean changePassword(String old_password, String new_password, String email, String type)
 			throws SQLException {
+		String hashedNewPassword = hashPassword(new_password);
+		String hashedOldPassword = hashPassword(old_password);
 		PreparedStatement p = null;
 		if (type.equalsIgnoreCase("repair_expert")) {
 			p = c.prepareStatement("update repair_experts set password=? where email=? and password=?");
 		}
-		p.setString(1, new_password);
+		p.setString(1, hashedNewPassword);
 		p.setString(2, email);
-		p.setString(3, old_password);
+		p.setString(3, hashedOldPassword);
 		int x = p.executeUpdate();
 		if (x == 0) {
 			return false;
