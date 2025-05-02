@@ -1,5 +1,6 @@
 package com.gadget.model;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,9 +44,10 @@ public class DAO {
 	}
 
 	public String userSignIn(String email, String password) throws SQLException {
+		String hashedPassword = hashPassword(password);
 		PreparedStatement p = c.prepareStatement("select * from users where email=? and password=?");
 		p.setString(1, email);
-		p.setString(2, password);
+		p.setString(2, hashedPassword);
 		ResultSet rs = p.executeQuery();
 		if (rs.next()) {
 			return rs.getString("name");
@@ -89,11 +91,12 @@ public class DAO {
 	}
 
 	public String userSignUp(String name, String phone, String email, String password) throws SQLException {
+		String hashedPassword = hashPassword(password); 
 		PreparedStatement p = c.prepareStatement("insert into users (email,name,phone,password) values (?,?,?,?)");
 		p.setString(1, email);
 		p.setString(2, name);
 		p.setString(3, phone);
-		p.setString(4, password);
+		p.setString(4, hashedPassword);
 		try {
 			p.executeUpdate();
 			return "success";
@@ -443,4 +446,20 @@ public class DAO {
 			return null;
 		}
 	}
+	
+	// Built-in Java hash function using SHA-256
+		private String hashPassword(String password) {
+		    try {
+		        MessageDigest md = MessageDigest.getInstance("SHA-256");
+		        byte[] hashBytes = md.digest(password.getBytes());
+		        StringBuilder sb = new StringBuilder();
+		        for (byte b : hashBytes) {
+		            sb.append(String.format("%02x", b)); 
+		        }
+		        return sb.toString();
+		    } catch (NoSuchAlgorithmException e) {
+		        throw new RuntimeException("SHA-256 not supported", e);
+		    }
+		}
+
 }
