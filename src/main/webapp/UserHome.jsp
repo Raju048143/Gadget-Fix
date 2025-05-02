@@ -82,34 +82,66 @@ if (user_name == null) {
 	String state = request.getParameter("state");
 	String city = request.getParameter("city");
 	String area = request.getParameter("area");
-	if (state != null) {
-	%>
-	<h5 class="bg-primary text-white p-3 text-center mt-2">
-		All Repair Experts [<%=area%>,<%=city%>,<%=state%>]
-	</h5>
-	<%
-	DAO db = new DAO();
-	ArrayList<HashMap> repairExperts = db.getAllRepairExpertsByStateCityArea(state, city, area);
-	db.closeConnection();
-	for (HashMap repairExpert : repairExperts) {
-		String status = (String) repairExpert.get("status");
-		if (status.equalsIgnoreCase("active")) {
-	%>
-	<p class="bg-warning p-2 my-2">
-		Name: <b><%=repairExpert.get("name")%></b> State: <b><%=repairExpert.get("state")%></b>
-		City: <b><%=repairExpert.get("city")%></b> Area: <b><%=repairExpert.get("area")%></b>
-		&nbsp; &nbsp; <a class="btn btn-success btn-sm"
-			href="RepairExpertDetailsForUser.jsp?email=<%=repairExpert.get("email")%>">
-			Details </a>
-	</p>
-	<%
-	}
-	}
-	}
-	%>
-	<h5 class="bg-primary text-white p-3 text-center ">All Repair
-		Requests</h5>
 
+	if (state != null) {
+		DAO db = new DAO();
+		ArrayList<HashMap> repairExperts = db.getAllRepairExpertsByStateCityArea(state, city, area);
+		db.closeConnection();
+
+		ArrayList<HashMap> activeExperts = new ArrayList<>();
+		for (HashMap expert : repairExperts) {
+			String status = (String) expert.get("status");
+			if ("active".equalsIgnoreCase(status)) {
+				activeExperts.add(expert);
+			}
+		}
+
+		if (!activeExperts.isEmpty()) {
+%>
+	<h5 class="bg-info text-white p-3 text-center">
+		All Repair Experts [<%= area %>,
+		<%= city %>,
+		<%= state %>]
+	</h5>
+	<div class="table-responsive mt-3 text-center">
+		<table class="table table-bordered table-striped">
+			<thead class="table-dark">
+				<tr>
+					<th>Name</th>
+					<th>State</th>
+					<th>City</th>
+					<th>Area</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%
+			for (HashMap expert : activeExperts) {
+%>
+				<tr>
+					<td><%= expert.get("name") %></td>
+					<td><%= expert.get("state") %></td>
+					<td><%= expert.get("city") %></td>
+					<td><%= expert.get("area") %></td>
+					<td><a class="btn btn-success btn-sm"
+						href="RepairExpertDetailsForUser.jsp?email=<%= expert.get("email") %>">
+							Details </a></td>
+				</tr>
+				<%
+			}
+%>
+			</tbody>
+		</table>
+	</div>
+	<%
+		} else {
+%>
+	<p class="text-danger text-center mt-3">No repair experts available
+		in the selected location.</p>
+	<%
+		}
+	}
+%>
 	<section class="container-fluid">
 		<%
 		DAO db = new DAO();
@@ -180,49 +212,47 @@ if (user_name == null) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
 					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Amount
-					Received: <b><%=gsg.get("amount_rec")%></b><br> Current
-					Status: <b><%=gsg.get("status")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Amount Received:
+					<b><%=gsg.get("amount_rec")%></b><br> Current Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("accept")) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
 					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Amount
-					Received: <b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Amount Received:
+					<b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
 					Current Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("decline")) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
 					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Amount
-					Received: <b><%=gsg.get("amount_rec")%></b><br> Decline: <b><%=gsg.get("approved")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Amount Received:
+					<b><%=gsg.get("amount_rec")%></b><br> Decline: <b><%=gsg.get("approved")%></b><br>
 					Current Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("received")) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Current
-					Status: <b><%=gsg.get("status")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Current Status:
+					<b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("repaired")) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
-					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Amount Received: <b><%=gsg.get("amount_rec")%></b><br>
-					Approved: <b><%=gsg.get("approved")%></b><br> Received: <b><%=gsg.get("received")%></b><br>
-					Repaired: <b><%=gsg.get("repaired")%></b><br> Current
-					Status: <b><%=gsg.get("status")%></b><br>
+					Request Confirmed: <b><%=gsg.get("requested")%></b><br> Amount
+					Received: <b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
+					Current Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("delivered")) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
-					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Amount Received: <b><%=gsg.get("amount_rec")%></b><br>
-					Approved: <b><%=gsg.get("approved")%></b><br> Received: <b><%=gsg.get("received")%></b><br>
-					Repaired: <b><%=gsg.get("repaired")%></b><br> Delivered: <b><%=gsg.get("delivered")%></b><br>
-					Current Status: <b><%=gsg.get("status")%></b><br>
+					Request Confirmed: <b><%=gsg.get("requested")%></b><br> Amount
+					Received: <b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
+					Delivered: <b><%=gsg.get("delivered")%></b><br> Current
+					Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("confirmed")) {
 					%>
@@ -234,10 +264,10 @@ if (user_name == null) {
 					%>
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
 					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Amount
-					Received: <b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
-					Repairing: <b><%=gsg.get("approved")%></b><br> Current
-					Status: <b><%=gsg.get("status")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Amount Received:
+					<b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
+					Repairing: <b><%=gsg.get("approved")%></b><br> Current Status:
+					<b><%=gsg.get("status")%></b><br>
 					<%
 					}
 					}
