@@ -188,12 +188,15 @@ if (user_name == null) {
 					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=Decline&type=user&email=<%=gadget.get("repair_expert_email")%>">Decline</a>
 
 				<%
-				} else if (status.equalsIgnoreCase("pending")) {
-				%>
-				<a class="btn btn-danger btn-sm"
-					href="DeleteGadget?id=<%=gadget.get("id")%>">Delete Request</a>
-				<%
-				}
+				} else if (status.equalsIgnoreCase("repaired")) {
+					%>
+					<p>Pay Repair Amount</p>
+					<h2>Pay ₹5</h2>
+    <form action="PaymentServlet" method="post">
+        <button type="submit">Pay Now</button>
+    </form>
+					<%
+					}
 				%>
 			</div>
 			<div class="col-sm">

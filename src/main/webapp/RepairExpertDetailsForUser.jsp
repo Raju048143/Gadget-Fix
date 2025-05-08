@@ -98,7 +98,7 @@
 						type="file" required /><br> <label>Gadget Photo 2:</label> <input
 						class="" name="photo2" type="file" required /> <input
 						name="address" class="form-control p-4 my-2" type="text"
-						maxlength="20" placeholder="Address" required /> <input
+						maxlength="100" placeholder="Address" required /> <input
 						type="hidden" name="repair_expert_email"
 						value="<%= repairExpert.get("email") %>"> <input
 						type="hidden" name="user_email" value="<%= user_email %>">
