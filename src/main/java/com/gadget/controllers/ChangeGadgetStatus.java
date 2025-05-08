@@ -28,7 +28,6 @@ public class ChangeGadgetStatus extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String status = request.getParameter("status");
 			String email = request.getParameter("email");
-			System.out.println(status);
 			DAO db = new DAO();
 			db.changeGadgetStatus(id, status);
 			db.closeConnection();
@@ -52,10 +51,14 @@ public class ChangeGadgetStatus extends HttpServlet {
 				body = "Your Gadget is under process.";
 			} else if (status.equalsIgnoreCase("delivered")) {
 				body = "Your Gadget has been delivered.";
+			} else if (status.equalsIgnoreCase("cod")) {
+				body = "You choose COD method to pay repair amount";
+			} else if (status.equalsIgnoreCase("paid")) {
+				body = "Your payment of gadget repair is successful";
 			}
-			// mail send code
+
 			SendMail.sendMail(email, "Gadget Repair Request Status", body);
-			// mail send code --end
+
 
 			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Status Updation Success !");

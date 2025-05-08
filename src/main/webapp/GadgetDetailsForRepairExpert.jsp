@@ -193,7 +193,9 @@ if (repair_expert_name == null) {
 						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
 						Request Confirmed: <b><%=gsg.get("requested")%></b><br /> Amount
 						Received: <b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
-						Received: <b><%=gsg.get("received")%></b><br /> Repaired: <b><%=gsg.get("repaired")%></b><br />
+						Received: <b><%=gsg.get("received")%></b><br /> 
+						Repairing: <b><%=gsg.get("repairing")%></b><br>
+						Repaired: <b><%=gsg.get("repaired")%></b><br />
 						Current Status: <b><%=gsg.get("status")%></b>
 						<hr />
 						<%
@@ -226,7 +228,7 @@ if (repair_expert_name == null) {
 						Request Confirmed: <b><%=gsg.get("requested")%></b><br />
 						Received: <b><%=gsg.get("received")%></b><br /> Amount Received:
 						<b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
-						Repairing: <b><%=gsg.get("approved")%></b><br /> Current Status:
+						Current Status:
 						<b><%=gsg.get("status")%></b>
 						<hr />
 						<%

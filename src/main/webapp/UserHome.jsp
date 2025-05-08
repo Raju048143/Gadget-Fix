@@ -200,7 +200,7 @@ if (user_name == null) {
 						value="<%=gadget.get("repair_amount")%>"> <input
 						type="hidden" name="type" value="user"> <input
 						type="hidden" name="email"
-						value="<%=gadget.get("repair_expert_email")%>">
+						value="<%= user_email %>">
 					<button type="submit">Pay Now</button>
 				</form>
 				<a class="btn btn-danger btn-sm"

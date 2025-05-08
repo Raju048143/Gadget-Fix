@@ -35,11 +35,10 @@ public class AddRepairAmount extends HttpServlet {
 			db.closeConnection();
 			String body = "";
 			if (status.equalsIgnoreCase("WaitingApproval")) {
-				body = "Your Gadget repair amount is Quoted, Please Accept or Declinr for further Process.";
+				body = "Your Gadget repair amount is Quote "+repair_amount+ " Rs , Please Accept or Declinr for further Process.";
 			}
-			// mail send code
+
 			SendMail.sendMail(email, "Gadget Repair Request Status", body);
-			// mail send code --end
 
 			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Repair Amount Quoted Success!");

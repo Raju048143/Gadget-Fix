@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.gadget.model.DAO;
-
+import com.gadget.model.SendMail;
 /**
  * Servlet implementation class UserSignUp
  */
@@ -35,6 +35,7 @@ public class UserSignUp extends HttpServlet {
 			if (msg.equalsIgnoreCase("success")) {
 				session.setAttribute("user_name", name);
 				session.setAttribute("user_email", email);
+				SendMail.sendMail(email, "Gadget-Fix Registration", "Welcome to Gadget-Fix, Your registration is completed");
 				response.sendRedirect("UserHome.jsp");
 			} else {
 				session.setAttribute("msg", msg);
