@@ -1,4 +1,5 @@
 package com.gadget.model;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.InputStream;
@@ -31,7 +32,7 @@ public class DAO {
 	}
 
 	public String repairExpertLogin(String email, String password) throws SQLException {
-		String hashedPassword = hashPassword(password); 
+		String hashedPassword = hashPassword(password);
 		PreparedStatement p = c
 				.prepareStatement("select * from repair_experts where email=? and password=? and status='Active'");
 		p.setString(1, email);
@@ -92,7 +93,7 @@ public class DAO {
 	}
 
 	public String userSignUp(String name, String phone, String email, String password) throws SQLException {
-		String hashedPassword = hashPassword(password); 
+		String hashedPassword = hashPassword(password);
 		PreparedStatement p = c.prepareStatement("insert into users (email,name,phone,password) values (?,?,?,?)");
 		p.setString(1, email);
 		p.setString(2, name);
@@ -118,7 +119,7 @@ public class DAO {
 		p.setString(5, city);
 		p.setString(6, area);
 		p.setBinaryStream(7, photo);
-		p.setString(8,hashedPassword);
+		p.setString(8, hashedPassword);
 		try {
 			p.executeUpdate();
 			return "Registration Success !";
@@ -177,13 +178,13 @@ public class DAO {
 	}
 
 	public void deleteGadget(int id) throws SQLException {
-	    PreparedStatement p1 = c.prepareStatement("DELETE FROM status WHERE id = ?");
-	    p1.setInt(1, id);
-	    p1.executeUpdate();
+		PreparedStatement p1 = c.prepareStatement("DELETE FROM status WHERE id = ?");
+		p1.setInt(1, id);
+		p1.executeUpdate();
 
-	    PreparedStatement p2 = c.prepareStatement("DELETE FROM gadgets WHERE id = ?");
-	    p2.setInt(1, id);
-	    p2.executeUpdate();
+		PreparedStatement p2 = c.prepareStatement("DELETE FROM gadgets WHERE id = ?");
+		p2.setInt(1, id);
+		p2.executeUpdate();
 	}
 
 	public void changeGadgetStatus(int id, String status) throws SQLException {
@@ -204,6 +205,10 @@ public class DAO {
 			p = c.prepareStatement("update status set status=?, confirmed = now() where id=?");
 		} else if (status.equalsIgnoreCase("repairing")) {
 			p = c.prepareStatement("update status set status=? where id=?");
+		} else if (status.equalsIgnoreCase("paid")) {
+			p = c.prepareStatement("update status set status=?, pay = now() where id=?");
+		} else if (status.equalsIgnoreCase("cod")) {
+			p = c.prepareStatement("update status set status=?, pay = now() where id=?");
 		}
 
 		p.setString(1, status);
@@ -351,6 +356,8 @@ public class DAO {
 			gadget.put("repaired", rs.getString("repaired"));
 			gadget.put("delivered", rs.getString("delivered"));
 			gadget.put("confirmed", rs.getString("confirmed"));
+			gadget.put("repairing", rs.getString("repairing"));
+			gadget.put("pay", rs.getString("pay"));
 			gstatus.add(gadget);
 		}
 		return gstatus;
@@ -451,20 +458,20 @@ public class DAO {
 			return null;
 		}
 	}
-	
+
 	// Built-in Java hash function using SHA-256
-		private String hashPassword(String password) {
-		    try {
-		        MessageDigest md = MessageDigest.getInstance("SHA-256");
-		        byte[] hashBytes = md.digest(password.getBytes());
-		        StringBuilder sb = new StringBuilder();
-		        for (byte b : hashBytes) {
-		            sb.append(String.format("%02x", b)); 
-		        }
-		        return sb.toString();
-		    } catch (NoSuchAlgorithmException e) {
-		        throw new RuntimeException("SHA-256 not supported", e);
-		    }
+	private String hashPassword(String password) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hashBytes = md.digest(password.getBytes());
+			StringBuilder sb = new StringBuilder();
+			for (byte b : hashBytes) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("SHA-256 not supported", e);
 		}
+	}
 
 }

@@ -190,12 +190,23 @@ if (user_name == null) {
 				<%
 				} else if (status.equalsIgnoreCase("repaired")) {
 					%>
-					<p>Pay Repair Amount</p>
-					<h2>Pay ₹5</h2>
-    <form action="PaymentServlet" method="post">
-        <button type="submit">Pay Now</button>
-    </form>
-					<%
+				<p>Pay Repair Amount</p>
+				<h2>
+					Pay ₹<%=gadget.get("repair_amount")%></h2>
+				<form action="PaymentServlet" method="post">
+					<input type="hidden" name="id" value="<%=gadget.get("id")%>">
+					<input type="hidden" name="status" value="Pay"> <input
+						type="hidden" name="amount"
+						value="<%=gadget.get("repair_amount")%>"> <input
+						type="hidden" name="type" value="user"> <input
+						type="hidden" name="email"
+						value="<%=gadget.get("repair_expert_email")%>">
+					<button type="submit">Pay Now</button>
+				</form>
+				<a class="btn btn-danger btn-sm"
+					href="ChangeGadgetStatus?id=<%=gadget.get("id")%>&status=cod&type=user&email=<%=gadget.get("repair_expert_email")%>">COD</a>
+
+				<%
 					}
 				%>
 			</div>
@@ -253,9 +264,9 @@ if (user_name == null) {
 					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
 					Request Confirmed: <b><%=gsg.get("requested")%></b><br> Amount
 					Received: <b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
-					Received: <b><%=gsg.get("received")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
-					Delivered: <b><%=gsg.get("delivered")%></b><br> Current
-					Status: <b><%=gsg.get("status")%></b><br>
+					Repairing: <b><%=gsg.get("repairing")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
+					Payment: <b><%=gsg.get("pay")%></b><br> Delivered: <b><%=gsg.get("delivered")%></b><br>
+					Current Status: <b><%=gsg.get("status")%></b><br>
 					<%
 					} else if (status.equalsIgnoreCase("confirmed")) {
 					%>
@@ -272,7 +283,16 @@ if (user_name == null) {
 					Repairing: <b><%=gsg.get("approved")%></b><br> Current Status:
 					<b><%=gsg.get("status")%></b><br>
 					<%
-					}
+					}else if (status.equalsIgnoreCase("cod")||status.equalsIgnoreCase("paid")) {
+						%>
+					Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
+					Request Confirmed: <b><%=gsg.get("requested")%></b><br>
+					Received: <b><%=gsg.get("received")%></b><br> Amount Received:<b><%=gsg.get("amount_rec")%></b><br>
+					Approved: <b><%=gsg.get("approved")%></b><br> Repairing: <b><%=gsg.get("repairing")%></b><br>
+					Repaired: <b><%=gsg.get("repaired")%></b><br> Payment: <b><%=gsg.get("pay")%></b><br>
+					Current Status:<b><%=gsg.get("status")%></b><br>
+					<%
+						}
 					}
 					%>
 				</div>

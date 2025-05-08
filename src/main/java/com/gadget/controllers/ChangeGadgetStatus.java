@@ -28,6 +28,7 @@ public class ChangeGadgetStatus extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String status = request.getParameter("status");
 			String email = request.getParameter("email");
+			System.out.println(status);
 			DAO db = new DAO();
 			db.changeGadgetStatus(id, status);
 			db.closeConnection();

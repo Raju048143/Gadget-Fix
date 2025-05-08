@@ -61,7 +61,7 @@ if (repair_expert_name == null) {
 		</div>
 	</nav>
 
-	<h4 class="bg-primary text-white text-center p-2">Gadget Details</h4>
+	<h4 class="bg-info text-white text-center p-2">Gadget Details</h4>
 	<div class="bg-light p-2 m-2">
 		<%
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -115,7 +115,7 @@ if (repair_expert_name == null) {
 					<a class="btn btn-success btn-sm"
 						href="ChangeGadgetStatus?id=<%=gsg.get("id")%>&status=Repaired&type=repair_expert&email=<%=gsg.get("user_email")%>">Repaired</a>
 					<%
-					} else if (status.equalsIgnoreCase("repaired")) {
+					} else if (status.equalsIgnoreCase("cod") || status.equalsIgnoreCase("paid")) {
 					%>
 					<a class="btn btn-success btn-sm"
 						href="ChangeGadgetStatus?id=<%=gsg.get("id")%>&status=Delivered&type=repair_expert&email=<%=gsg.get("user_email")%>">Delivered</a>
@@ -204,9 +204,9 @@ if (repair_expert_name == null) {
 						<br /> Status:<br /> Requested: <b><%=gsg.get("requested")%></b><br />
 						Request Confirmed: <b><%=gsg.get("requested")%></b><br /> Amount
 						Received: <b><%=gsg.get("amount_rec")%></b><br /> Approved: <b><%=gsg.get("approved")%></b><br />
-						Received: <b><%=gsg.get("received")%></b><br /> Repaired: <b><%=gsg.get("repaired")%></b><br />
-						Delivered: <b><%=gsg.get("delivered")%></b><br /> Current Status:
-						<b><%=gsg.get("status")%></b>
+						Repairing: <b><%=gsg.get("repairing")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
+						Payment: <b><%=gsg.get("pay")%></b><br> Delivered: <b><%=gsg.get("delivered")%></b><br />
+						Current Status: <b><%=gsg.get("status")%></b>
 						<hr />
 						<%
 						} else if (status.equalsIgnoreCase("confirmed")) {
@@ -229,6 +229,15 @@ if (repair_expert_name == null) {
 						Repairing: <b><%=gsg.get("approved")%></b><br /> Current Status:
 						<b><%=gsg.get("status")%></b>
 						<hr />
+						<%
+						} else if (status.equalsIgnoreCase("cod") || status.equalsIgnoreCase("paid")) {
+						%>
+						Status: <br>Requested: <b><%=gsg.get("requested")%></b><br>
+						Request Confirmed: <b><%=gsg.get("requested")%></b><br>
+						Received: <b><%=gsg.get("received")%></b><br> Amount
+						Received:<b><%=gsg.get("amount_rec")%></b><br> Approved: <b><%=gsg.get("approved")%></b><br>
+						Repairing: <b><%=gsg.get("repairing")%></b><br> Repaired: <b><%=gsg.get("repaired")%></b><br>
+						Payment: <b><%=gsg.get("repaired")%></b><br> Current Status:<b><%=gsg.get("status")%></b><br>
 						<%
 						}
 						%>
