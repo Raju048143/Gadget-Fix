@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.gadget.model.DAO;
-
+import com.gadget.model.SendMail;
 /**
  * Servlet implementation class ChangeRepairExpertStatus
  */
@@ -31,6 +31,8 @@ public class ChangeRepairExpertStatus extends HttpServlet {
 			db.closeConnection();
 			HttpSession session = request.getSession();
 			session.setAttribute("msg", "Status Updation Success !");
+			String body = "Your account is "+ status + " by Admin.";
+			SendMail.sendMail(email, "Gadget-Fix account", body);
 			response.sendRedirect("RepairExpertDetails.jsp?email=" + email);
 		} catch (Exception e) {
 			e.printStackTrace();
