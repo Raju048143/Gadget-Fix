@@ -204,7 +204,7 @@ public class DAO {
 		} else if (status.equalsIgnoreCase("confirmed")) {
 			p = c.prepareStatement("update status set status=?, confirmed = now() where id=?");
 		} else if (status.equalsIgnoreCase("repairing")) {
-			p = c.prepareStatement("update status set status=? repairing = now() where id=?");
+			p = c.prepareStatement("update status set status=?, repairing = now() where id=?");
 		} else if (status.equalsIgnoreCase("paid")) {
 			p = c.prepareStatement("update status set status=?, pay = now() where id=?");
 		} else if (status.equalsIgnoreCase("cod")) {

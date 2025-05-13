@@ -332,10 +332,6 @@ if (user_name == null) {
 			class="mx-3" src="resources/samsung.png" alt="" height="50px">
 	</section>
 
-	<footer class="bg-dark p-2 text-white text-center">
-		<p>&copy; Rights Reserved.</p>
-	</footer>
-	<a id="top-button"><i class="fa-solid fa-circle-up"></i></a>
 
 </body>
 <script>

@@ -85,10 +85,7 @@ if (admin_name == null) {
 	</div>
 
 
-	<footer class="bg-dark p-2 text-white text-center">
-		<p>&copy; Rights Reserved.</p>
-	</footer>
-	<a id="top-button"><i class="fa-solid fa-circle-up"></i></a>
+
 </body>
 <script>
 	AOS.init();
